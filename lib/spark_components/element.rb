@@ -138,7 +138,8 @@ module SparkComponents
     def initialize(view, attributes = nil, &block)
       @view = view
       attributes ||= {}
-      initialize_tag_attributes(attributes)
+      initialize_tag_attributes
+      assign_tag_attributes(attributes)
       initialize_attributes(attributes)
       initialize_elements
       @yield = block_given? ? @view.capture(self, &block) : nil
@@ -231,11 +232,13 @@ module SparkComponents
       @view.render(partial: file, object: self)
     end
 
-    def initialize_tag_attributes(attributes)
+    def initialize_tag_attributes
       @tag_attributes = self.class.tag_attributes.each_with_object({}) do |(name, options), obj|
         obj[name] = options.dup
       end
+    end
 
+    def assign_tag_attributes(attributes)
       # support default data, class, and aria attribute names
       data_attr(attributes.delete(:data)) if attributes[:data]
       aria_attr(attributes.delete(:aria)) if attributes[:aria]

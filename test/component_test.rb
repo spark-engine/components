@@ -283,7 +283,7 @@ class ComponentTest < ActiveSupport::TestCase
 
   test "splat option allows assignment of root tag attributes" do
     component_class = Class.new(SparkComponents::Component)
-    component = component_class.new(view_class.new, splat: { foo: "baz"})
+    component = component_class.new(view_class.new, splat: { foo: "baz" })
     assert_equal %(foo="baz"), component.tag_attr.to_s
 
     component.tag_attr.add bar: true

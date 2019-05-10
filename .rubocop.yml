@@ -14,7 +14,7 @@ Metrics/BlockLength:
 Metrics/ClassLength:
   Exclude:
     - 'test/**/*.rb'
-    - 'lib/components/element.rb'
+    - 'lib/spark_components/element.rb'
 
 Naming/VariableNumber:
   EnforcedStyle: snake_case
