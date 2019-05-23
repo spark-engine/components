@@ -95,7 +95,7 @@ module SparkComponents
         element.parent = self
 
         if element.respond_to?(:render)
-          element.pre_render
+          element.before_render
           element.yield = element.render
         end
 
@@ -142,14 +142,14 @@ module SparkComponents
       assign_tag_attributes(attributes)
       initialize_attributes(attributes)
       initialize_elements
+      after_init
       @yield = block_given? ? @view.capture(self, &block) : nil
       validate!
-      after_init
     end
 
-    def pre_render; end
-
     def after_init; end
+
+    def before_render; end
 
     def parent=(obj)
       @parents = [obj.parents, obj].flatten.compact
@@ -157,13 +157,6 @@ module SparkComponents
 
     def parent
       @parents.last
-    end
-
-    # Set tag attribute values from from parameters
-    def update_attr(name)
-      %i[aria data tag].each do |el|
-        @tag_attributes[el][name] = get_instance_variable(name) if @tag_attributes[el].key?(name)
-      end
     end
 
     def classnames
@@ -206,27 +199,18 @@ module SparkComponents
       atr
     end
 
-    def concat(*args, &block)
-      @view.concat(*args, &block)
-    end
-
-    def content_tag(*args, &block)
-      @view.content_tag(*args, &block)
-    end
-
-    def link_to(*args, &block)
-      @view.link_to(*args, &block)
-    end
-
-    def component(*args, &block)
-      @view.component(*args, &block)
-    end
-
     def to_s
       @yield
     end
 
     protected
+
+    # Set tag attribute values from from parameters
+    def update_attr(name)
+      %i[aria data tag].each do |el|
+        @tag_attributes[el][name] = get_instance_variable(name) if @tag_attributes[el].key?(name)
+      end
+    end
 
     def render_partial(file)
       @view.render(partial: file, object: self)
@@ -264,6 +248,21 @@ module SparkComponents
     end
 
     private
+
+    # Define common view methods to "alias"
+    def view_methods
+      %i[tag content_tag image_tag concat content_for link_to component]
+    end
+
+    def extend_view_methods
+      view_methods.each do |name|
+        next unless @view.respond_to?(name)
+
+        self.class.define_method(name) do |*args, &block|
+          @view.send(name, *args, &block)
+        end
+      end
+    end
 
     def get_instance_variable(name)
       instance_variable_get(:"@#{name}")

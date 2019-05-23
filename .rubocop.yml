@@ -36,3 +36,8 @@ Style/MixinUsage:
 
 Style/StringLiterals:
   EnforcedStyle: double_quotes
+
+Style/FrozenStringLiteralComment:
+  Exclude:
+    - 'test/**/*.rb'
+
