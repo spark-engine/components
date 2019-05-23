@@ -142,6 +142,7 @@ module SparkComponents
       assign_tag_attributes(attributes)
       initialize_attributes(attributes)
       initialize_elements
+      extend_view_methods
       after_init
       @yield = block_given? ? @view.capture(self, &block) : nil
       validate!
@@ -256,7 +257,7 @@ module SparkComponents
 
     def extend_view_methods
       view_methods.each do |name|
-        next unless @view.respond_to?(name)
+        next if respond_to?(name) || !@view.respond_to?(name)
 
         self.class.define_method(name) do |*args, &block|
           @view.send(name, *args, &block)
