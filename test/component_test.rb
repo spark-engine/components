@@ -258,6 +258,8 @@ class ComponentTest < ActiveSupport::TestCase
     assert_equal "1, (1.1, 1.2), 2", list.items.join(", ")
   end
 
+  # Special attributes: tag, class, data, aria
+
   test "class_attr and base_class modify the default classname attribute" do
     component_class = Class.new(SparkComponents::Component) do
       base_class :one
@@ -357,6 +359,40 @@ class ComponentTest < ActiveSupport::TestCase
 
     assert_equal %(type="default"), component.tag_attr.to_s
     assert_equal %(type="alert"), component_2.tag_attr.to_s
+  end
+
+  # Themes
+
+  test "components can have themes with defaults" do
+    component_class = Class.new(SparkComponents::Component) do
+      add_theme default: "foo"
+    end
+    component = component_class.new(view_class.new)
+
+    assert_equal "foo", component.classnames.to_s
+  end
+
+  test "supports multiple themes" do
+    component_class = Class.new(SparkComponents::Component) do
+      add_theme default: :test, foo: "bar"
+    end
+
+    component = component_class.new(view_class.new, theme: :foo)
+    component_2 = component_class.new(view_class.new)
+
+    assert_equal "bar", component.classnames.to_s
+    assert_equal "test", component_2.classnames.to_s
+  end
+
+  test "adding an unsupported theme fails" do
+    component_class = Class.new(SparkComponents::Component) do
+      add_theme default: :test, alt: "alternate"
+    end
+
+    e = assert_raises(SparkComponents::Error) do
+      component_class.new(view_class.new, theme: :foo)
+    end
+    assert_equal "Unsupported theme: :foo is not a valid theme. Try: :default, :alt.", e.message
   end
 
   private

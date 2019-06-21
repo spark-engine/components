@@ -15,6 +15,10 @@ module SparkComponents
       @attributes ||= {}
     end
 
+    def self.themes
+      @themes ||= {}
+    end
+
     def self.elements
       @elements ||= {}
     end
@@ -47,6 +51,17 @@ module SparkComponents
 
     def self.add_class(*args)
       tag_attributes[:class].add(*args)
+    end
+
+    def self.add_theme(hash)
+      themes.merge!(hash)
+      return if attributes[:theme]
+
+      if hash.key?(:default)
+        attribute(theme: :default)
+      else
+        attribute(:theme)
+      end
     end
 
     def self.data_attr(*args)
@@ -129,6 +144,7 @@ module SparkComponents
     def self.inherited(subclass)
       attributes.each { |name, options| subclass.set_attribute(name, options.dup) }
       elements.each   { |name, options| subclass.elements[name] = options.dup }
+      subclass.themes.merge!(themes)
 
       subclass.tag_attributes.merge!(tag_attributes.each_with_object({}) do |(k, v), obj|
         obj[k] = v.dup
@@ -143,6 +159,7 @@ module SparkComponents
       initialize_attributes(attributes)
       initialize_elements
       extend_view_methods
+      initialize_themes
       after_init
       @yield = block_given? ? @view.capture(self, &block) : nil
       validate!
@@ -235,6 +252,22 @@ module SparkComponents
       self.class.attributes.each do |name, options|
         set_instance_variable(name, attributes[name] || (options[:default] && options[:default].dup))
         update_attr(name)
+      end
+    end
+
+    # Add a class based on the chosen theme
+    def initialize_themes
+      themes = self.class.themes.stringify_keys
+      return if themes.empty? || @theme.nil?
+
+      theme = @theme.to_s
+
+      if !themes.key?(theme)
+        theme_list = self.class.themes.keys.map(&:inspect).join(", ")
+        msg = "Unsupported theme: #{@theme.inspect} is not a valid theme. Try: #{theme_list}."
+        return raise(SparkComponents::Error, msg)
+      else
+        add_class themes[theme]
       end
     end
 
