@@ -329,8 +329,8 @@ class ComponentTest < ActiveSupport::TestCase
     end
     component = component_class.new(view_class.new, data: { foo: "bar" }, class: "one two", aria: { three: "four" })
 
-    assert_equal %(id="foo" class="one two" data-foo="bar" aria-three="four" role="nav"), component.attrs.to_s
-    assert_equal %(data-foo="bar" aria-three="four" role="nav"), component.attrs(add_class: false).to_s
+    assert_equal %(class="one two" data-foo="bar" aria-three="four" role="nav" id="foo"), component.attrs.to_s
+    assert_equal %(data-foo="bar" aria-three="four" role="nav" id="foo"), component.attrs(add_class: false).to_s
   end
 
   test "tag attributes are isolated across components" do

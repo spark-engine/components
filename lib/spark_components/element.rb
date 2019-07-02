@@ -109,16 +109,17 @@ module SparkComponents
         element = self.class.elements[name][:class].new(@view, attributes, &block)
         element.parent = self
 
-        if element.respond_to?(:render)
-          element.before_render
-          element.yield = element.render
-        end
-
         if multiple
           get_instance_variable(plural_name) << element
         else
           set_instance_variable(name, element)
         end
+
+        if element.respond_to?(:render)
+          element.before_render
+          element.yield = element.render
+        end
+
       end
 
       return if !multiple || name == plural_name
@@ -209,7 +210,6 @@ module SparkComponents
     def attrs(add_class: true)
       atr = Attributes::Hash.new
       # attrtiubte order: id, class, data-, aria-, misc tag attributes
-      atr[:id] = tag_attr.delete(:id)
       atr[:class] = classnames if add_class
       atr.merge!(data_attr.collapse)
       atr.merge!(aria_attr.collapse)
