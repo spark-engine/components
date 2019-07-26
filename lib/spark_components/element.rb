@@ -119,7 +119,6 @@ module SparkComponents
           element.before_render
           element.yield = element.render
         end
-
       end
 
       return if !multiple || name == plural_name
@@ -219,6 +218,13 @@ module SparkComponents
 
     def to_s
       @yield
+    end
+
+    # blank? is aliased to an element's content to easily determine if content is blank.
+    # This is because template conditionals may render an element's content empty.
+
+    def blank?
+      @yield.blank?
     end
 
     protected

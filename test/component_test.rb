@@ -138,6 +138,30 @@ class ComponentTest < ActiveSupport::TestCase
     assert_equal [], component.foos
   end
 
+  test "element blank? reports an empty block" do
+    component_class = Class.new(SparkComponents::Component) do
+      element :foo
+
+      def render
+        foo.to_s
+      end
+    end
+
+    component = component_class.new(view_class.new) do |com|
+      com.foo { nil }
+    end
+
+    component_two = component_class.new(view_class.new) do |com|
+      com.foo { "" }
+    end
+
+    assert_nil component.foo.to_s
+    assert_equal true, component.foo.blank?
+
+    assert_equal "", component_two.foo.to_s
+    assert_equal true, component_two.foo.blank?
+  end
+
   test "initialize with given attribute and successfull validation" do
     component_class = Class.new(SparkComponents::Component) do
       attribute :foo
