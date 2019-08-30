@@ -14,7 +14,7 @@ module SparkComponents
 
       # Output all attributes as [prefix-]name="value"
       def to_s
-        str = each_with_object([]) do |(name, value), array|
+        each_with_object([]) do |(name, value), array|
           if value.is_a?(self.class)
             array << value.to_s
           else
@@ -22,17 +22,6 @@ module SparkComponents
             array << %(#{name}="#{value}") unless value.nil?
           end
         end.sort.join(" ")
-        str.respond_to?(:html_safe) ? str.html_safe : str
-      end
-
-      # Return a prefix flattened hash,
-      # For example: { "toggle"=>"div" } -> { "data-toggle"=>"div" }
-      def collapse
-        each_with_object({}) do |(name, value), obj|
-          name = [prefix, name].compact.join("-")
-          name = name.downcase.gsub(/[\W_]+/, "-")
-          obj[name] = value unless value.nil? || value.is_a?(String) && value.empty?
-        end
       end
 
       # Easy assess to create a new Attributes::Hash
@@ -111,11 +100,7 @@ module SparkComponents
       end
 
       def to_s
-        safe join(" ")
-      end
-
-      def safe(str)
-        str.respond_to?(:html_safe) ? str.html_safe : str
+        join(" ")
       end
     end
 

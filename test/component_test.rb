@@ -239,6 +239,25 @@ class ComponentTest < ActiveSupport::TestCase
     assert_equal "Validation failed: Bar can't be blank", e.message
   end
 
+  test "initialize with given attribute and successfull choice validation" do
+    component_class = Class.new(SparkComponents::Component) do
+      attribute :foo
+      validates_choice :foo, %w(bar baz)
+    end
+    assert_nothing_raised { component_class.new(view_class.new, foo: "bar") }
+  end
+
+  test "initialize with given attribute and invalid choice validation" do
+    component_class = Class.new(SparkComponents::Component) do
+      attribute :size
+      validates_choice :size, %w(small medium large)
+    end
+    e = assert_raises(ActiveModel::ValidationError) do
+      component_class.new(view_class.new, size: "orange")
+    end
+    assert_equal "Validation failed: Size \"orange\" is not a valid option. Options include: small, medium, large", e.message
+  end
+
   test "element can render a component" do
     base_component_class = Class.new(SparkComponents::Component) do
       attribute tag: :h1
@@ -296,24 +315,24 @@ class ComponentTest < ActiveSupport::TestCase
     assert_equal :one, component.classnames.base
   end
 
-  test "tag_attr defines component attributes which can modify root tag attributes" do
+  test "root_attr defines component attributes which can modify root tag attributes" do
     component_class = Class.new(SparkComponents::Component) do
-      tag_attr :foo, :bar, a: "b"
+      root_attr :foo, :bar, a: "b"
     end
     component = component_class.new(view_class.new, foo: "baz")
-    assert_equal %(a="b" foo="baz"), component.tag_attr.to_s
+    assert_equal %(a="b" foo="baz"), component.root_attr.to_s
 
-    component.tag_attr.add bar: true
-    assert_equal %(a="b" bar="true" foo="baz"), component.tag_attr.to_s
+    component.root_attr.add bar: true
+    assert_equal %(a="b" bar="true" foo="baz"), component.root_attr.to_s
   end
 
   test "splat option allows assignment of root tag attributes" do
     component_class = Class.new(SparkComponents::Component)
     component = component_class.new(view_class.new, splat: { foo: "baz" })
-    assert_equal %(foo="baz"), component.tag_attr.to_s
+    assert_equal %(foo="baz"), component.root_attr.to_s
 
-    component.tag_attr.add bar: true
-    assert_equal %(bar="true" foo="baz"), component.tag_attr.to_s
+    component.root_attr.add bar: true
+    assert_equal %(bar="true" foo="baz"), component.root_attr.to_s
   end
 
   test "data_attr defines component attributes which can modify data- attributes" do
@@ -347,14 +366,14 @@ class ComponentTest < ActiveSupport::TestCase
     assert_equal %(aria-three="four"), component.aria_attr.to_s
   end
 
-  test "attrs outputs class, data, aria, and tag attributes" do
+  test "tag_attrs outputs class, data, aria, and tag attributes" do
     component_class = Class.new(SparkComponents::Component) do
-      tag_attr role: "nav", id: "foo"
+      root_attr role: "nav", id: "foo"
     end
     component = component_class.new(view_class.new, data: { foo: "bar" }, class: "one two", aria: { three: "four" })
 
-    assert_equal %(aria-three="four" class="one two" data-foo="bar" id="foo" role="nav"), component.attrs.to_s
-    assert_equal %(aria-three="four" data-foo="bar" id="foo" role="nav"), component.attrs(add_class: false).to_s
+    assert_equal %(aria-three="four" class="one two" data-foo="bar" id="foo" role="nav"), component.tag_attrs.to_s
+    assert_equal %(aria-three="four" data-foo="bar" id="foo" role="nav"), component.tag_attrs(add_class: false).to_s
   end
 
   test "tag attributes are isolated across components" do
@@ -365,7 +384,7 @@ class ComponentTest < ActiveSupport::TestCase
         add_class "type-#{@type}"
         data_attr type: type
         aria_attr type: type
-        tag_attr type: type
+        root_attr type: type
       end
     end
 
@@ -381,8 +400,8 @@ class ComponentTest < ActiveSupport::TestCase
     assert_equal %(aria-type="default"), component.aria_attr.to_s
     assert_equal %(aria-type="alert"), component_2.aria_attr.to_s
 
-    assert_equal %(type="default"), component.tag_attr.to_s
-    assert_equal %(type="alert"), component_2.tag_attr.to_s
+    assert_equal %(type="default"), component.root_attr.to_s
+    assert_equal %(type="alert"), component_2.root_attr.to_s
   end
 
   private

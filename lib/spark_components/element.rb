@@ -42,31 +42,35 @@ module SparkComponents
     end
 
     def self.base_class(name)
-      tag_attributes.classnames.base = name
+      attrs.classnames.base = name
     end
 
     def self.add_class(*args)
-      tag_attributes.classnames.add(*args)
+      attrs.classnames.add(*args)
     end
 
     def self.data_attr(*args)
-      set_attr(:data, *args)
+      attrs.data.add(attribute(*args))
     end
 
     def self.aria_attr(*args)
-      set_attr(:aria, *args)
+      attrs.aria.add(attribute(*args))
     end
 
-    def self.tag_attr(*args)
-      set_attr(:root, *args)
+    def self.root_attr(*args)
+      attrs.root.add(attribute(*args))
     end
 
-    def self.set_attr(name, *args)
-      tag_attributes.send(name).add(attribute(*args))
+    def self.attrs
+      @attrs ||= SparkComponents::Attributes::Tag.new
     end
 
-    def self.tag_attributes
-      @tag_attributes ||= SparkComponents::Attributes::Tag.new
+    def self.validates_choice(name, choices)
+      validates(name, inclusion: {
+        presence: true,
+        in: choices,
+        message: "\"%{value}\" is not a valid option. Options include: #{choices.join(", ")}"
+      })
     end
 
     # rubocop:disable Metrics/AbcSize
@@ -125,14 +129,14 @@ module SparkComponents
       attributes.each { |name, options| subclass.set_attribute(name, options.dup) }
       elements.each   { |name, options| subclass.elements[name] = options.dup }
 
-      subclass.tag_attributes.merge!(tag_attributes.dup)
+      subclass.attrs.merge!(attrs.dup)
     end
 
     def initialize(view, attributes = nil, &block)
       @view = view
       attributes ||= {}
-      initialize_tag_attributes
-      assign_tag_attributes(attributes)
+      initialize_attrs
+      assign_attrs(attributes)
       initialize_attributes(attributes)
       initialize_elements
       extend_view_methods
@@ -154,7 +158,7 @@ module SparkComponents
     end
 
     def classnames
-      @tag_attributes.classnames
+      @attrs.classnames
     end
 
     def base_class(name = nil)
@@ -171,19 +175,19 @@ module SparkComponents
     end
 
     def data_attr(*args)
-      @tag_attributes.data.add(*args)
+      @attrs.data.add(*args)
     end
 
     def aria_attr(*args)
-      @tag_attributes.aria.add(*args)
+      @attrs.aria.add(*args)
     end
 
-    def tag_attr(*args)
-      @tag_attributes.root.add(*args)
+    def root_attr(*args)
+      @attrs.root.add(*args)
     end
 
-    def attrs(add_class: true)
-      atr = @tag_attributes.attrs
+    def tag_attrs(add_class: true)
+      atr = @attrs.attrs
       atr.delete(:class) unless add_class
       atr
     end
@@ -204,7 +208,7 @@ module SparkComponents
     # Set tag attribute values from from parameters
     def update_attr(name)
       %i[aria data root].each do |el|
-        @tag_attributes.send(el)[name] = get_instance_variable(name) if @tag_attributes.send(el).key?(name)
+        @attrs.send(el)[name] = get_instance_variable(name) if @attrs.send(el).key?(name)
       end
     end
 
@@ -212,16 +216,17 @@ module SparkComponents
       @view.render(partial: file, object: self)
     end
 
-    def initialize_tag_attributes
-      @tag_attributes = self.class.tag_attributes.dup
+    def initialize_attrs
+      @attrs = self.class.attrs.dup
     end
 
-    def assign_tag_attributes(attributes)
+    # Assign tag attributes from arguments
+    def assign_attrs(attributes)
       # support default data, class, and aria attribute names
       data_attr(attributes.delete(:data)) if attributes[:data]
       aria_attr(attributes.delete(:aria)) if attributes[:aria]
       add_class(*attributes.delete(:class)) if attributes[:class]
-      tag_attr(attributes.delete(:splat)) if attributes[:splat]
+      root_attr(attributes.delete(:splat)) if attributes[:splat]
     end
 
     def initialize_attributes(attributes)
@@ -245,7 +250,7 @@ module SparkComponents
 
     # Define common view methods to "alias"
     def view_methods
-      %i[tag content_tag image_tag concat content_for link_to component]
+      %i[tag content_tag image_tag concat content_for link_to component capture]
     end
 
     def extend_view_methods
