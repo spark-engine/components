@@ -42,27 +42,27 @@ module SparkComponents
     end
 
     def self.base_class(name)
-      attrs.classnames.base = name
+      tag_attrs.classnames.base = name
     end
 
     def self.add_class(*args)
-      attrs.classnames.add(*args)
+      tag_attrs.classnames.add(*args)
     end
 
     def self.data_attr(*args)
-      attrs.data.add(attribute(*args))
+      tag_attrs.data.add(attribute(*args))
     end
 
     def self.aria_attr(*args)
-      attrs.aria.add(attribute(*args))
+      tag_attrs.aria.add(attribute(*args))
     end
 
     def self.root_attr(*args)
-      attrs.root.add(attribute(*args))
+      tag_attrs.root.add(attribute(*args))
     end
 
-    def self.attrs
-      @attrs ||= SparkComponents::Attributes::Tag.new
+    def self.tag_attrs
+      @tag_attrs ||= SparkComponents::Attributes::Tag.new
     end
 
     def self.validates_choice(name, choices)
@@ -129,14 +129,14 @@ module SparkComponents
       attributes.each { |name, options| subclass.set_attribute(name, options.dup) }
       elements.each   { |name, options| subclass.elements[name] = options.dup }
 
-      subclass.attrs.merge!(attrs.dup)
+      subclass.tag_attrs.merge!(tag_attrs.dup)
     end
 
     def initialize(view, attributes = nil, &block)
       @view = view
       attributes ||= {}
-      initialize_attrs
-      assign_attrs(attributes)
+      initialize_tag_attrs
+      assign_tag_attrs(attributes)
       initialize_attributes(attributes)
       initialize_elements
       extend_view_methods
@@ -158,7 +158,7 @@ module SparkComponents
     end
 
     def classnames
-      @attrs.classnames
+      @tag_attrs.classnames
     end
 
     def base_class(name = nil)
@@ -175,21 +175,19 @@ module SparkComponents
     end
 
     def data_attr(*args)
-      @attrs.data.add(*args)
+      @tag_attrs.data.add(*args)
     end
 
     def aria_attr(*args)
-      @attrs.aria.add(*args)
+      @tag_attrs.aria.add(*args)
     end
 
     def root_attr(*args)
-      @attrs.root.add(*args)
+      @tag_attrs.root.add(*args)
     end
 
-    def tag_attrs(add_class: true)
-      atr = @attrs.attrs
-      atr.delete(:class) unless add_class
-      atr
+    def tag_attrs
+      @tag_attrs.attrs
     end
 
     def to_s
@@ -206,9 +204,9 @@ module SparkComponents
     protected
 
     # Set tag attribute values from from parameters
-    def update_attr(name)
+    def update_tag_attr(name)
       %i[aria data root].each do |el|
-        @attrs.send(el)[name] = get_instance_variable(name) if @attrs.send(el).key?(name)
+        @tag_attrs.send(el)[name] = get_instance_variable(name) if @tag_attrs.send(el).key?(name)
       end
     end
 
@@ -216,12 +214,12 @@ module SparkComponents
       @view.render(partial: file, object: self)
     end
 
-    def initialize_attrs
-      @attrs = self.class.attrs.dup
+    def initialize_tag_attrs
+      @tag_attrs = self.class.tag_attrs.dup
     end
 
     # Assign tag attributes from arguments
-    def assign_attrs(attributes)
+    def assign_tag_attrs(attributes)
       # support default data, class, and aria attribute names
       data_attr(attributes.delete(:data)) if attributes[:data]
       aria_attr(attributes.delete(:aria)) if attributes[:aria]
@@ -232,7 +230,7 @@ module SparkComponents
     def initialize_attributes(attributes)
       self.class.attributes.each do |name, options|
         set_instance_variable(name, attributes[name] || (options[:default] && options[:default].dup))
-        update_attr(name)
+        update_tag_attr(name)
       end
     end
 
