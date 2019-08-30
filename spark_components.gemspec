@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.version     = SparkComponents::VERSION
   s.authors     = ["Brandon Mathis"]
   s.email       = ["brandon@imathis.com"]
-  s.homepage    = "https://github.com/imathis/spark_components"
+  s.homepage    = "https://github.com/spark-engine/components"
   s.summary     = "Simple view components for Rails 5.1+"
   s.description = "Simple view components for Rails 5.1+"
   s.license     = "MIT"
