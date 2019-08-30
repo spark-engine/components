@@ -7,7 +7,7 @@ module SparkComponents
 
       def add(*args)
         args.each do |arg|
-          arg.is_a?(::Hash) ? self.merge!(arg) : self[arg.to_sym] = nil
+          arg.is_a?(::Hash) ? merge!(arg) : self[arg.to_sym] = nil
         end
         self
       end
@@ -18,7 +18,7 @@ module SparkComponents
           if value.is_a?(self.class)
             array << value.to_s
           else
-            name = [prefix, name].compact.join("-").gsub(/[\W_]+/, '-')
+            name = [prefix, name].compact.join("-").gsub(/[\W_]+/, "-")
             array << %(#{name}="#{value}") unless value.nil?
           end
         end.sort.join(" ")
@@ -99,6 +99,12 @@ module SparkComponents
         new_arr
       end
 
+      def join_class(name, separator = "-")
+        raise(SparkComponents::Attributes::Error, "Base class not defined for `join_class(#{name}, …)`") if base.nil?
+
+        [base, name].join(separator)
+      end
+
       def to_s
         join(" ")
       end
@@ -107,58 +113,75 @@ module SparkComponents
     class Tag
       attr_reader :attrs
 
-      def initialize(obj={})
-        @attrs = Hash.new
+      def initialize(obj = {})
+        @attrs = Attributes::Hash.new
         merge!(obj)
       end
 
-      def data
-        attrs[:data] ||= Data.new
+      def root(obj = {})
+        attrs[:root] ||= Attributes::Hash.new
+        attrs[:root].add(obj) unless obj.empty?
+        attrs[:root]
       end
 
-      def aria
+      def aria(obj = {})
         attrs[:aria] ||= Aria.new
+        attrs[:aria].add(obj) unless obj.empty?
+        attrs[:aria]
       end
 
-      def classnames
+      def data(obj = {})
+        attrs[:data] ||= Data.new
+        attrs[:data].add(obj) unless obj.empty?
+        attrs[:data]
+      end
+
+      def classnames(*args)
         attrs[:class] ||= Classname.new
+        attrs[:class].add(*args) unless args.empty?
+        attrs[:class]
       end
 
-      def root
-        attrs[:root] ||= Hash.new
+      def add_class(*args)
+        classnames.add(*args)
       end
 
-      def new(obj={})
+      def base_class(name)
+        classnames.base = name unless name.nil?
+        classnames.base
+      end
+
+      def new(obj = {})
         self.class.new(obj)
       end
 
       # Ensure each attribute is distinct
       def dup
-        new(attrs.each_with_object(Hash.new) do |(k, v), obj|
+        new(attrs.each_with_object(Attributes::Hash.new) do |(k, v), obj|
           obj[k] = v.dup
         end)
       end
 
-      def merge!(obj={})
+      def merge!(obj = {})
         merge_obj(self, obj)
       end
 
-      def merge(obj={})
+      def merge(obj = {})
         merge_obj(dup, obj)
       end
 
-      def merge_obj(tag, obj={})
+      def merge_obj(tag, obj = {})
         # If merging another Tag, extract attrs to merge
         obj = obj.attrs if obj.is_a?(Tag)
 
         obj.each do |key, val|
           if val.is_a?(Classname)
             # preserve object state
-            tag.attrs[:class] = val;
+            tag.attrs[:class] = val
           else
             case key.to_sym
-            when :class; tag.classnames.add(val)
-            when :data, :aria, :root; tag.send(key).add(val)
+            when :class then tag.classnames.add(val)
+            when :data, :aria, :root then tag.send(key).add(val)
             else; tag.root[key] = val
             end
           end

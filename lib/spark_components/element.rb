@@ -41,24 +41,24 @@ module SparkComponents
       end
     end
 
-    def self.base_class(name)
-      tag_attrs.classnames.base = name
+    def self.base_class(name = nil)
+      tag_attrs.base_class(name)
     end
 
     def self.add_class(*args)
-      tag_attrs.classnames.add(*args)
+      tag_attrs.add_class(*args)
     end
 
     def self.data_attr(*args)
-      tag_attrs.data.add(attribute(*args))
+      tag_attrs.data(attribute(*args))
     end
 
     def self.aria_attr(*args)
-      tag_attrs.aria.add(attribute(*args))
+      tag_attrs.aria(attribute(*args))
     end
 
     def self.root_attr(*args)
-      tag_attrs.root.add(attribute(*args))
+      tag_attrs.root(attribute(*args))
     end
 
     def self.tag_attrs
@@ -66,11 +66,12 @@ module SparkComponents
     end
 
     def self.validates_choice(name, choices)
-      validates(name, inclusion: {
-        presence: true,
-        in: choices,
-        message: "\"%{value}\" is not a valid option. Options include: #{choices.join(", ")}"
-      })
+      validates(name,
+                inclusion: {
+                  presence: true,
+                  in: choices,
+                  message: "\"%{value}\" is not a valid option. Options include: #{choices.join(', ')}"
+                })
     end
 
     # rubocop:disable Metrics/AbcSize
@@ -157,8 +158,8 @@ module SparkComponents
       @parents.last
     end
 
-    def classnames
-      @tag_attrs.classnames
+    def classnames(*args)
+      @tag_attrs.classnames(*args)
     end
 
     def base_class(name = nil)
@@ -167,23 +168,23 @@ module SparkComponents
     end
 
     def add_class(*args)
-      classnames.add(*args)
+      classnames(*args)
     end
 
-    def join_class(name, separator: "-")
-      [base_class, name].join(separator) unless base_class.nil?
+    def join_class(*args)
+      classnames.join_class(*args)
     end
 
     def data_attr(*args)
-      @tag_attrs.data.add(*args)
+      @tag_attrs.data(*args)
     end
 
     def aria_attr(*args)
-      @tag_attrs.aria.add(*args)
+      @tag_attrs.aria(*args)
     end
 
     def root_attr(*args)
-      @tag_attrs.root.add(*args)
+      @tag_attrs.root(*args)
     end
 
     def tag_attrs

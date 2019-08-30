@@ -242,7 +242,7 @@ class ComponentTest < ActiveSupport::TestCase
   test "initialize with given attribute and successfull choice validation" do
     component_class = Class.new(SparkComponents::Component) do
       attribute :foo
-      validates_choice :foo, %w(bar baz)
+      validates_choice :foo, %w[bar baz]
     end
     assert_nothing_raised { component_class.new(view_class.new, foo: "bar") }
   end
@@ -250,12 +250,13 @@ class ComponentTest < ActiveSupport::TestCase
   test "initialize with given attribute and invalid choice validation" do
     component_class = Class.new(SparkComponents::Component) do
       attribute :size
-      validates_choice :size, %w(small medium large)
+      validates_choice :size, %w[small medium large]
     end
     e = assert_raises(ActiveModel::ValidationError) do
       component_class.new(view_class.new, size: "orange")
     end
-    assert_equal "Validation failed: Size \"orange\" is not a valid option. Options include: small, medium, large", e.message
+    assert_equal "Validation failed: Size \"orange\" is not a valid option.\
+      Options include: small, medium, large", e.message
   end
 
   test "element can render a component" do
