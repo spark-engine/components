@@ -239,6 +239,26 @@ class ComponentTest < ActiveSupport::TestCase
     assert_equal "Validation failed: Bar can't be blank", e.message
   end
 
+  test "initialize with given attribute and successfull choice validation" do
+    component_class = Class.new(SparkComponents::Component) do
+      attribute :foo
+      validates_choice :foo, %w[bar baz]
+    end
+    assert_nothing_raised { component_class.new(view_class.new, foo: "bar") }
+  end
+
+  test "initialize with given attribute and invalid choice validation" do
+    component_class = Class.new(SparkComponents::Component) do
+      attribute :size
+      validates_choice :size, %w[small medium large]
+    end
+    e = assert_raises(ActiveModel::ValidationError) do
+      component_class.new(view_class.new, size: "orange")
+    end
+    assert_equal "Validation failed: Size \"orange\" is not a valid option.\
+ Options include: small, medium, large", e.message
+  end
+
   test "element can render a component" do
     base_component_class = Class.new(SparkComponents::Component) do
       attribute tag: :h1
@@ -292,28 +312,28 @@ class ComponentTest < ActiveSupport::TestCase
     component = component_class.new(view_class.new, class: "four five")
 
     assert_equal "one two three four five", component.classnames.to_s
-    assert_equal :one, component.classnames.base
     assert_equal "one-two", component.join_class("two")
+    assert_equal :one, component.classnames.base
   end
 
-  test "tag_attr defines component attributes which can modify root tag attributes" do
+  test "root_attr defines component attributes which can modify root tag attributes" do
     component_class = Class.new(SparkComponents::Component) do
-      tag_attr :foo, :bar, a: "b"
+      root_attr :foo, :bar, a: "b"
     end
     component = component_class.new(view_class.new, foo: "baz")
-    assert_equal %(foo="baz" a="b"), component.tag_attr.to_s
+    assert_equal %(a="b" foo="baz"), component.root_attr.to_s
 
-    component.tag_attr.add bar: true
-    assert_equal %(foo="baz" bar="true" a="b"), component.tag_attr.to_s
+    component.root_attr.add bar: true
+    assert_equal %(a="b" bar="true" foo="baz"), component.root_attr.to_s
   end
 
   test "splat option allows assignment of root tag attributes" do
     component_class = Class.new(SparkComponents::Component)
     component = component_class.new(view_class.new, splat: { foo: "baz" })
-    assert_equal %(foo="baz"), component.tag_attr.to_s
+    assert_equal %(foo="baz"), component.root_attr.to_s
 
-    component.tag_attr.add bar: true
-    assert_equal %(foo="baz" bar="true"), component.tag_attr.to_s
+    component.root_attr.add bar: true
+    assert_equal %(bar="true" foo="baz"), component.root_attr.to_s
   end
 
   test "data_attr defines component attributes which can modify data- attributes" do
@@ -321,10 +341,10 @@ class ComponentTest < ActiveSupport::TestCase
       data_attr :foo, :bar, a: "b"
     end
     component = component_class.new(view_class.new, foo: "baz")
-    assert_equal %(data-foo="baz" data-a="b"), component.data_attr.to_s
+    assert_equal %(data-a="b" data-foo="baz"), component.data_attr.to_s
 
     component.data_attr bar: true
-    assert_equal %(data-foo="baz" data-bar="true" data-a="b"), component.data_attr.to_s
+    assert_equal %(data-a="b" data-bar="true" data-foo="baz"), component.data_attr.to_s
   end
 
   test "aria_attr defines component attributes which can modify aria- attributes" do
@@ -332,10 +352,10 @@ class ComponentTest < ActiveSupport::TestCase
       aria_attr :foo, :bar, a: "b"
     end
     component = component_class.new(view_class.new, foo: "baz")
-    assert_equal %(aria-foo="baz" aria-a="b"), component.aria_attr.to_s
+    assert_equal %(aria-a="b" aria-foo="baz"), component.aria_attr.to_s
 
     component.aria_attr bar: true
-    assert_equal %(aria-foo="baz" aria-bar="true" aria-a="b"), component.aria_attr.to_s
+    assert_equal %(aria-a="b" aria-bar="true" aria-foo="baz"), component.aria_attr.to_s
   end
 
   test "data, class, and aria component options sets default attributes" do
@@ -347,14 +367,13 @@ class ComponentTest < ActiveSupport::TestCase
     assert_equal %(aria-three="four"), component.aria_attr.to_s
   end
 
-  test "attrs outputs class, data, aria, and tag attributes" do
+  test "tag_attrs outputs class, data, aria, and tag attributes" do
     component_class = Class.new(SparkComponents::Component) do
-      tag_attr role: "nav", id: "foo"
+      root_attr role: "nav", id: "foo"
     end
     component = component_class.new(view_class.new, data: { foo: "bar" }, class: "one two", aria: { three: "four" })
 
-    assert_equal %(class="one two" data-foo="bar" aria-three="four" role="nav" id="foo"), component.attrs.to_s
-    assert_equal %(data-foo="bar" aria-three="four" role="nav" id="foo"), component.attrs(add_class: false).to_s
+    assert_equal %(aria-three="four" class="one two" data-foo="bar" id="foo" role="nav"), component.tag_attrs.to_s
   end
 
   test "tag attributes are isolated across components" do
@@ -365,7 +384,7 @@ class ComponentTest < ActiveSupport::TestCase
         add_class "type-#{@type}"
         data_attr type: type
         aria_attr type: type
-        tag_attr type: type
+        root_attr type: type
       end
     end
 
@@ -381,42 +400,8 @@ class ComponentTest < ActiveSupport::TestCase
     assert_equal %(aria-type="default"), component.aria_attr.to_s
     assert_equal %(aria-type="alert"), component_2.aria_attr.to_s
 
-    assert_equal %(type="default"), component.tag_attr.to_s
-    assert_equal %(type="alert"), component_2.tag_attr.to_s
-  end
-
-  # Themes
-
-  test "components can have themes with defaults" do
-    component_class = Class.new(SparkComponents::Component) do
-      add_theme default: "foo"
-    end
-    component = component_class.new(view_class.new)
-
-    assert_equal "foo", component.classnames.to_s
-  end
-
-  test "supports multiple themes" do
-    component_class = Class.new(SparkComponents::Component) do
-      add_theme default: :test, foo: "bar"
-    end
-
-    component = component_class.new(view_class.new, theme: :foo)
-    component_2 = component_class.new(view_class.new)
-
-    assert_equal "bar", component.classnames.to_s
-    assert_equal "test", component_2.classnames.to_s
-  end
-
-  test "adding an unsupported theme fails" do
-    component_class = Class.new(SparkComponents::Component) do
-      add_theme default: :test, alt: "alternate"
-    end
-
-    e = assert_raises(SparkComponents::Error) do
-      component_class.new(view_class.new, theme: :foo)
-    end
-    assert_equal "Unsupported theme: :foo is not a valid theme. Try: :default, :alt.", e.message
+    assert_equal "default", component.tag_attrs[:type]
+    assert_equal "alert", component_2.tag_attrs[:type]
   end
 
   private

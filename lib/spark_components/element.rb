@@ -15,10 +15,6 @@ module SparkComponents
       @attributes ||= {}
     end
 
-    def self.themes
-      @themes ||= {}
-    end
-
     def self.elements
       @elements ||= {}
     end
@@ -45,48 +41,38 @@ module SparkComponents
       end
     end
 
-    def self.base_class(name)
-      tag_attributes[:class].base = name
+    def self.base_class(name = nil)
+      tag_attrs.base_class(name)
     end
 
     def self.add_class(*args)
-      tag_attributes[:class].add(*args)
-    end
-
-    def self.add_theme(hash)
-      themes.merge!(hash)
-      return if attributes[:theme]
-
-      if hash.key?(:default)
-        attribute(theme: :default)
-      else
-        attribute(:theme)
-      end
+      tag_attrs.add_class(*args)
     end
 
     def self.data_attr(*args)
-      set_attr(:data, *args)
+      tag_attrs.data(attribute(*args))
     end
 
     def self.aria_attr(*args)
-      set_attr(:aria, *args)
+      arg = attribute(*args)
+      tag_attrs.aria(arg)
     end
 
-    def self.tag_attr(*args)
-      set_attr(:tag, *args)
+    def self.root_attr(*args)
+      tag_attrs.root(attribute(*args))
     end
 
-    def self.set_attr(name, *args)
-      tag_attributes[name].add(attribute(*args))
+    def self.tag_attrs
+      @tag_attrs ||= SparkComponents::Attributes::Tag.new
     end
 
-    def self.tag_attributes
-      @tag_attributes ||= {
-        class: SparkComponents::Attributes::Classname.new,
-        data: SparkComponents::Attributes::Data.new,
-        aria: SparkComponents::Attributes::Aria.new,
-        tag: SparkComponents::Attributes::Hash.new
-      }
+    def self.validates_choice(name, choices)
+      validates(name,
+                inclusion: {
+                  presence: true,
+                  in: choices,
+                  message: "\"%{value}\" is not a valid option. Options include: #{choices.join(', ')}"
+                })
     end
 
     # rubocop:disable Metrics/AbcSize
@@ -144,22 +130,18 @@ module SparkComponents
     def self.inherited(subclass)
       attributes.each { |name, options| subclass.set_attribute(name, options.dup) }
       elements.each   { |name, options| subclass.elements[name] = options.dup }
-      subclass.themes.merge!(themes)
 
-      subclass.tag_attributes.merge!(tag_attributes.each_with_object({}) do |(k, v), obj|
-        obj[k] = v.dup
-      end)
+      subclass.tag_attrs.merge!(tag_attrs.dup)
     end
 
     def initialize(view, attributes = nil, &block)
       @view = view
       attributes ||= {}
-      initialize_tag_attributes
-      assign_tag_attributes(attributes)
+      initialize_tag_attrs
+      assign_tag_attrs(attributes)
       initialize_attributes(attributes)
       initialize_elements
       extend_view_methods
-      initialize_themes
       after_init
       @yield = block_given? ? @view.capture(self, &block) : nil
       validate!
@@ -177,8 +159,8 @@ module SparkComponents
       @parents.last
     end
 
-    def classnames
-      @tag_attributes[:class]
+    def classnames(*args)
+      @tag_attrs.classnames(*args)
     end
 
     def base_class(name = nil)
@@ -187,33 +169,27 @@ module SparkComponents
     end
 
     def add_class(*args)
-      classnames.add(*args)
+      classnames(*args)
     end
 
-    def join_class(name, separator: "-")
-      [base_class, name].join(separator) unless base_class.nil?
+    def join_class(*args)
+      classnames.join_class(*args)
     end
 
     def data_attr(*args)
-      @tag_attributes[:data].add(*args)
+      @tag_attrs.data(*args)
     end
 
     def aria_attr(*args)
-      @tag_attributes[:aria].add(*args)
+      @tag_attrs.aria(*args)
     end
 
-    def tag_attr(*args)
-      @tag_attributes[:tag].add(*args)
+    def root_attr(*args)
+      @tag_attrs.root(*args)
     end
 
-    def attrs(add_class: true)
-      atr = Attributes::Hash.new
-      # attrtiubte order: id, class, data-, aria-, misc tag attributes
-      atr[:class] = classnames if add_class
-      atr.merge!(data_attr.collapse)
-      atr.merge!(aria_attr.collapse)
-      atr.merge!(tag_attr)
-      atr
+    def tag_attrs
+      @tag_attrs.attrs
     end
 
     def to_s
@@ -230,9 +206,9 @@ module SparkComponents
     protected
 
     # Set tag attribute values from from parameters
-    def update_attr(name)
-      %i[aria data tag].each do |el|
-        @tag_attributes[el][name] = get_instance_variable(name) if @tag_attributes[el].key?(name)
+    def update_tag_attr(name)
+      %i[aria data root].each do |el|
+        @tag_attrs.send(el)[name] = get_instance_variable(name) if @tag_attrs.send(el).key?(name)
       end
     end
 
@@ -240,40 +216,23 @@ module SparkComponents
       @view.render(partial: file, object: self)
     end
 
-    def initialize_tag_attributes
-      @tag_attributes = self.class.tag_attributes.each_with_object({}) do |(name, options), obj|
-        obj[name] = options.dup
-      end
+    def initialize_tag_attrs
+      @tag_attrs = self.class.tag_attrs.dup
     end
 
-    def assign_tag_attributes(attributes)
+    # Assign tag attributes from arguments
+    def assign_tag_attrs(attributes)
       # support default data, class, and aria attribute names
       data_attr(attributes.delete(:data)) if attributes[:data]
       aria_attr(attributes.delete(:aria)) if attributes[:aria]
       add_class(*attributes.delete(:class)) if attributes[:class]
-      tag_attr(attributes.delete(:splat)) if attributes[:splat]
+      root_attr(attributes.delete(:splat)) if attributes[:splat]
     end
 
     def initialize_attributes(attributes)
       self.class.attributes.each do |name, options|
         set_instance_variable(name, attributes[name] || (options[:default] && options[:default].dup))
-        update_attr(name)
-      end
-    end
-
-    # Add a class based on the chosen theme
-    def initialize_themes
-      themes = self.class.themes.stringify_keys
-      return if themes.empty? || @theme.nil?
-
-      theme = @theme.to_s
-
-      if !themes.key?(theme)
-        theme_list = self.class.themes.keys.map(&:inspect).join(", ")
-        msg = "Unsupported theme: #{@theme.inspect} is not a valid theme. Try: #{theme_list}."
-        return raise(SparkComponents::Error, msg)
-      else
-        add_class themes[theme]
+        update_tag_attr(name)
       end
     end
 
@@ -291,7 +250,7 @@ module SparkComponents
 
     # Define common view methods to "alias"
     def view_methods
-      %i[tag content_tag image_tag concat content_for link_to component]
+      %i[tag content_tag image_tag concat content_for link_to component capture]
     end
 
     def extend_view_methods
