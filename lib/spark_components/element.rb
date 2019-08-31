@@ -54,7 +54,8 @@ module SparkComponents
     end
 
     def self.aria_attr(*args)
-      tag_attrs.aria(attribute(*args))
+      arg = attribute(*args)
+      tag_attrs.aria(arg)
     end
 
     def self.root_attr(*args)

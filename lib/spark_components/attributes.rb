@@ -15,8 +15,10 @@ module SparkComponents
       # Output all attributes as [prefix-]name="value"
       def to_s
         each_with_object([]) do |(name, value), array|
-          if value.is_a?(self.class)
-            array << value.to_s
+          if value.is_a?(Attributes::Hash)
+            # Flatten nested hashs and inject them unless empty
+            value = value.to_s
+            array << value unless value.empty?
           else
             name = [prefix, name].compact.join("-").gsub(/[\W_]+/, "-")
             array << %(#{name}="#{value}") unless value.nil?
@@ -119,9 +121,8 @@ module SparkComponents
       end
 
       def root(obj = {})
-        attrs[:root] ||= Attributes::Hash.new
-        attrs[:root].add(obj) unless obj.empty?
-        attrs[:root]
+        attrs.add(obj) unless obj.empty?
+        attrs
       end
 
       def aria(obj = {})
@@ -149,6 +150,10 @@ module SparkComponents
       def base_class(name)
         classnames.base = name unless name.nil?
         classnames.base
+      end
+
+      def join_class(*args)
+        classnames.join_class(*args)
       end
 
       def new(obj = {})
@@ -181,8 +186,8 @@ module SparkComponents
           else
             case key.to_sym
             when :class then tag.classnames.add(val)
-            when :data, :aria, :root then tag.send(key).add(val)
-            else; tag.root[key] = val
+            when :data, :aria then tag.send(key).add(val)
+            else; tag.attrs[key] = val
             end
           end
         end

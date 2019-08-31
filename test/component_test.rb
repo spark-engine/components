@@ -256,7 +256,7 @@ class ComponentTest < ActiveSupport::TestCase
       component_class.new(view_class.new, size: "orange")
     end
     assert_equal "Validation failed: Size \"orange\" is not a valid option.\
-      Options include: small, medium, large", e.message
+ Options include: small, medium, large", e.message
   end
 
   test "element can render a component" do
@@ -400,8 +400,8 @@ class ComponentTest < ActiveSupport::TestCase
     assert_equal %(aria-type="default"), component.aria_attr.to_s
     assert_equal %(aria-type="alert"), component_2.aria_attr.to_s
 
-    assert_equal %(type="default"), component.root_attr.to_s
-    assert_equal %(type="alert"), component_2.root_attr.to_s
+    assert_equal "default", component.tag_attrs[:type]
+    assert_equal "alert", component_2.tag_attrs[:type]
   end
 
   private

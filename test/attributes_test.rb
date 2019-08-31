@@ -57,4 +57,24 @@ class AttributesTest < ActiveSupport::TestCase
     assert_equal "blast", attr.base.to_s
     assert_equal "blast foo bar", attr.to_s
   end
+
+  test "Tag manages aria, class, data, and root level attributes" do
+    tag_attr = SparkComponents::Attributes::Tag.new
+
+    tag_attr.root(foo: "bar")
+    assert_equal %(foo="bar"), tag_attr.to_s
+
+    tag_attr.aria(foo: "bar")
+    assert_equal %(aria-foo="bar"), tag_attr.aria.to_s
+    assert_equal %(aria-foo="bar" foo="bar"), tag_attr.to_s
+
+    tag_attr.data(foo: "bar")
+    assert_equal %(data-foo="bar"), tag_attr.data.to_s
+    assert_equal %(aria-foo="bar" data-foo="bar" foo="bar"), tag_attr.to_s
+
+    tag_attr.add_class("foo")
+    tag_attr.base_class("base")
+    assert_equal %(aria-foo="bar" class="base foo" data-foo="bar" foo="bar"), tag_attr.to_s
+    assert_equal %(base-bar), tag_attr.join_class("bar")
+  end
 end
