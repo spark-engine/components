@@ -8,6 +8,10 @@ module SparkComponents
       app.config.assets.paths << SparkComponents.components_path if app.config.respond_to?(:assets)
     end
 
+    initializer 'components.autoload', :before => :set_autoload_paths do |app|
+      app.config.autoload_paths << File.join(app.root, 'app/components')
+    end
+
     initializer "components.view_helpers" do
       ActiveSupport.on_load :action_controller do
         helper SparkComponents::ComponentHelper
