@@ -143,8 +143,12 @@ module SparkComponents
       initialize_elements
       extend_view_methods
       after_init
-      @yield = block_given? ? @view.capture(self, &block) : nil
+      @yield = render_block(&block)
       validate!
+    end
+
+    def render_block(&block)
+      block_given? ? @view.capture(self, &block) : nil
     end
 
     def after_init; end
