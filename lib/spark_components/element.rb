@@ -71,7 +71,7 @@ module SparkComponents
       supported_choices = choices.map { |c| c.is_a?(String) ? c.to_sym : c.to_s }.concat(choices)
 
       unless required
-        # Validate choice without requiring an option to be passed
+        # Allow nil if option is not required
         supported_choices.unshift(nil)
         # Add `nil` to the error messsages list of valid options
         choices.push("nil")
