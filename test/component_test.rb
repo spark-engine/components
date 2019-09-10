@@ -255,8 +255,8 @@ class ComponentTest < ActiveSupport::TestCase
     e = assert_raises(ActiveModel::ValidationError) do
       component_class.new(view_class.new, size: "orange")
     end
-    assert_equal "Validation failed: Size \"orange\" is not a valid option.\
- Options include: small, medium, large", e.message
+    assert_equal "Validation failed: Size \"orange\" is not valid. \
+Options for size include: small, medium, or large", e.message
   end
 
   test "element can render a component" do

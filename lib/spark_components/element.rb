@@ -66,13 +66,21 @@ module SparkComponents
       @tag_attrs ||= SparkComponents::Attributes::Tag.new
     end
 
-    def self.validates_choice(name, choices)
-      validates(name,
-                inclusion: {
-                  presence: true,
-                  in: choices,
-                  message: "\"%{value}\" is not a valid option. Options include: #{choices.join(', ')}"
-                })
+    def self.validates_choice(name, choices, required: true)
+      choices = [choices] unless choices.is_a?(Array)
+      supported_choices = choices.map { |c| c.is_a?(String) ? c.to_sym : c.to_s }.concat(choices)
+
+      unless required
+        # Validate choice without requiring an option to be passed
+        supported_choices.unshift(nil)
+        # Add `nil` to the error messsages list of valid options
+        choices.push("nil")
+      end
+
+      choices = choices.to_sentence(last_word_connector: ", or ")
+      message = "\"%<value>s\" is not valid. Options for #{name} include: #{choices}"
+
+      validates(name, inclusion: { in: supported_choices, message: message })
     end
 
     # rubocop:disable Metrics/AbcSize
