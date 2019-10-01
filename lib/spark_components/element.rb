@@ -67,20 +67,14 @@ module SparkComponents
     end
 
     def self.validates_choice(name, choices, required: true)
+      choices = choices.dup
       choices = [choices] unless choices.is_a?(Array)
       supported_choices = choices.map { |c| c.is_a?(String) ? c.to_sym : c.to_s }.concat(choices)
-
-      unless required
-        # Allow nil if option is not required
-        supported_choices.unshift(nil)
-        # Add `nil` to the error messsages list of valid options
-        choices.push("nil")
-      end
 
       choices = choices.to_sentence(last_word_connector: ", or ")
       message = "\"%<value>s\" is not valid. Options for #{name} include: #{choices}"
 
-      validates(name, inclusion: { in: supported_choices, message: message })
+      validates(name, inclusion: { in: supported_choices, message: message }, allow_blank: !required)
     end
 
     # rubocop:disable Metrics/AbcSize
@@ -94,7 +88,7 @@ module SparkComponents
       component = "#{component}_component".classify.constantize if component.is_a?(String)
 
       elements[name] = {
-        multiple: plural_name || false, class: Class.new(component || Element, &config)
+        multiple: plural_name || false, class: Class.new((component || Element), &config)
       }
 
       define_method_or_raise(name) do |attributes = nil, &block|
@@ -155,10 +149,6 @@ module SparkComponents
       validate!
     end
 
-    def render_block(&block)
-      block_given? ? @view.capture(self, &block) : nil
-    end
-
     def after_init; end
 
     def before_render; end
@@ -215,6 +205,12 @@ module SparkComponents
       @yield.blank?
     end
 
+    private
+
+    def render_block(&block)
+      block_given? ? @view.capture(self, &block) : nil
+    end
+
     protected
 
     # Set tag attribute values from from parameters
@@ -257,8 +253,6 @@ module SparkComponents
         end
       end
     end
-
-    private
 
     # Define common view methods to "alias"
     def view_methods

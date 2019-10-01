@@ -259,6 +259,14 @@ class ComponentTest < ActiveSupport::TestCase
 Options for size include: small, medium, or large", e.message
   end
 
+  test "validation of choices supports required: false option" do
+    component_class = Class.new(SparkComponents::Component) do
+      attribute :size
+      validates_choice :size, %w[small medium large], required: false
+    end
+    assert_nothing_raised { component_class.new(view_class.new) }
+  end
+
   test "element can render a component" do
     base_component_class = Class.new(SparkComponents::Component) do
       attribute tag: :h1
