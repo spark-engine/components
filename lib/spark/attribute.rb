@@ -93,8 +93,6 @@ module Spark
       end
     end
 
-    private_class_methoda :initialize_attributes
-
     def self.included(base)
       base.extend(ClassMethods)
     end

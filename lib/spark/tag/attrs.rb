@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require_relative "hash"
+require_relative "classname"
+
 module Spark
   module Tag
     class Attrs < Tag::Hash

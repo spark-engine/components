@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require_relative "element/methods"
+require_relative "element/class_methods"
+
 module Spark
   module Element
     class Error < StandardError; end

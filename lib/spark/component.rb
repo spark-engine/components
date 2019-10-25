@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+require_relative "element"
+require_relative "attribute"
+require_relative "tag/attrs"
+
 module Spark
   module Component
     def self.included(base)
