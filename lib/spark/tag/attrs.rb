@@ -8,12 +8,14 @@ module Spark
     class Attrs < Tag::Hash
       def add(hash)
         hash ||= {}
+        if (html = hash.delete(:html))
+          hash.deep_merge!(html)
+        end
 
         # Extract keys for special properties
         aria.add(hash.delete(:aria))       if hash[:aria].present?
         data.add(hash.delete(:data))       if hash[:data].present?
         classname.add(hash.delete(:class)) if hash[:class].present?
-        merge!(hash.delete(:html))         if hash[:html].present?
 
         super(hash)
       end
