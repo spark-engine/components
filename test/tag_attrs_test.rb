@@ -57,20 +57,31 @@ class TagAttrsTest < ActiveSupport::TestCase
     assert_equal "blast foo bar", attr.to_s
   end
 
-  test "Tag manages aria, class, data, and root level attributes" do
-    tag_attr = Spark::Tag::Attrs.new
+  test "Tag::Attrs manages aria, class, data, and root level attributes" do
+    tag_attr = Spark::Tag::Attrs.new.add(foo: "bar")
 
-    tag_attr.aria(foo: "bar")
+    tag_attr.aria.add(foo: "bar")
     assert_equal %(aria-foo="bar"), tag_attr.aria.to_s
     assert_equal %(aria-foo="bar" foo="bar"), tag_attr.to_s
 
-    tag_attr.data(foo: "bar")
+    tag_attr.data.add(foo: "bar")
     assert_equal %(data-foo="bar"), tag_attr.data.to_s
     assert_equal %(aria-foo="bar" data-foo="bar" foo="bar"), tag_attr.to_s
 
-    tag_attr.add_class("foo")
-    tag_attr.base_class("base")
+    tag_attr.classname.add("foo")
+    tag_attr.classname.base= "base"
     assert_equal %(aria-foo="bar" class="base foo" data-foo="bar" foo="bar"), tag_attr.to_s
-    assert_equal %(base-bar), tag_attr.join_base("bar")
+    assert_equal %(base-bar), tag_attr.classname.join_base("bar")
+  end
+
+  test "Tag::Attrs can handle adding aria, class, data, and root level attributes together" do
+    tag_attr = Spark::Tag::Attrs.new.add(root: "val", data: nil, aria: { label: "test" }, class: ["bar baz"])
+
+    assert_equal({ label: "test" }, tag_attr.aria)
+    assert_nil tag_attr[:data]
+    assert_nil tag_attr.classname.base
+    assert_equal "bar baz", tag_attr.classname.to_s
+
+    assert_equal %(aria-label="test" class="bar baz" root="val"), tag_attr.to_s
   end
 end
