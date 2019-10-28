@@ -4,7 +4,7 @@
 #
 #  # Example component usage:
 #
-#    SomeComponent < ActionView::Commponent::Base
+#    class SomeComponent
 #      include Spark::Attribute
 #
 #      # Set a :label attribute, and a :size attribute with default value :large
@@ -15,9 +15,9 @@
 #      end
 #    end
 #
-#  # In the view:
+#  # When initialized like:
 #
-#    = render(SomeComponent, label: "Test")
+#    SomeComponent.new(label: "Test")
 #
 #  The Component's instance will now have access to
 #

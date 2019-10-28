@@ -100,20 +100,31 @@ module Spark
 
       private
 
+      # If an element extends a component, extend that component's class and include the necessary modules
       def extend_class(component, &config)
-        base = Class.new(component || ActionView::Component::Base, &config)
-        base.include(Spark::Component)
-        base.include(Element::Methods)
+        base = base_class(component, &config)
+        base.include(Spark::Component)        unless base < Spark::Component
+        base.include(Spark::Element::Methods) unless base < Spark::Element::Methods
 
-        if component
-          base.define_singleton_method(:ensure_initializer_defined) {}
-
-          base.define_singleton_method(:source_location) do
-            component.source_location
+        if component && defined?(::ActionView::Component::Base)
+          unless base < Spark::ActionView::Component::ElementMethods
+            base.include(Spark::ActionView::Component::ElementMethods)
           end
         end
 
         base
+      end
+
+      def base_class(component, &config)
+        if component
+          base = Class.new(component, &config)
+          base.define_singleton_method(:source_component) { component }
+          base
+        elsif defined?(::ActionView::Component::Base)
+          Class.new(::ActionView::Component::Base, &config)
+        else
+          Class.new(&config)
+        end
       end
 
       # Prevent an element method from overwriting an existing method

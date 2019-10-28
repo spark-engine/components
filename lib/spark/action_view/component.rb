@@ -1,0 +1,48 @@
+# frozen_string_literal: true
+
+module Spark
+  module ActionView
+    module Component
+      # Override ActionView::Components::Base `render_in`
+      # This is only necessary in order to pass `self` as a block parameter
+      def render_in(view_context, &block)
+        self.class.compile
+        @view_context = view_context
+        @view_renderer ||= view_context.view_renderer
+        @lookup_context ||= view_context.lookup_context
+        @view_flow ||= view_context.view_flow
+        @virtual_path ||= virtual_path
+
+        # Pass self as a block parameter
+        @content = view_context.capture(self, &block) if block_given?
+        validate!
+        call
+      end
+
+      # Override Element's render_self method when component is used as an element
+      module ElementMethods
+        def render_self
+          return @content if @content
+
+          @content = render_in(view_context, &@_block)
+        end
+
+        def self.included(base)
+          base.extend(OverrideClassMethods)
+        end
+      end
+
+      # Override class methods when component is used as an element
+      module OverrideClassMethods
+        # This is used to force components to define an initialize method
+        # Overriding it means elements can defer to the original component's initialize method
+        def ensure_initializer_defined; end
+
+        # Allows elements to use component's original tempalte file.
+        def source_location
+          source_component.source_location
+        end
+      end
+    end
+  end
+end

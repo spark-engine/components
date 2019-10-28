@@ -13,11 +13,7 @@ module Spark
       def render_self
         return @content if @content.present? || !@_block
 
-        if self.class.component?
-          render_in(view_context, &@_block)
-        else
-          @content = view_context.capture(self, &@_block)
-        end
+        @content = view_context.capture(self, &@_block)
       end
 
       def yield
@@ -28,7 +24,7 @@ module Spark
         @_block = block
         initialize_attributes(attributes)
         initialize_elements
-        super(attributes, &block)
+        super
       end
     end
   end
