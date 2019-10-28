@@ -11,7 +11,7 @@ module Spark
       end
 
       def render_self
-        return @content if @content.present? || !_block
+        return @content if @content.present?
 
         @content = render_block(view_context, &_block)
       end
@@ -33,4 +33,3 @@ module Spark
     end
   end
 end
-

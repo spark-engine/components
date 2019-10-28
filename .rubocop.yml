@@ -26,7 +26,8 @@ Metrics/ClassLength:
     - 'lib/spark_components/element.rb'
 
 Layout/TrailingBlankLines:
-  Enabled: false
+ EnforcedStyle: final_newline
+ # Enabled: false
 
 Naming/VariableNumber:
   EnforcedStyle: snake_case

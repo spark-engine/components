@@ -141,4 +141,3 @@ module Spark
     end
   end
 end
-
