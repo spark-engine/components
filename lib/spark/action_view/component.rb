@@ -1,8 +1,21 @@
 # frozen_string_literal: true
 
 module Spark
+  module Component
+    # If an ActionView Component, inject overrides for Spark::ActionView::Component
+    def self.integrate(base)
+      return unless base < ::ActionView::Component::Base
+
+      base.include(Spark::ActionView::Component)
+    end
+  end
+
   module ActionView
     module Component
+      def self.included(base)
+        base.extend(ClassMethods)
+      end
+
       # Override ActionView::Components::Base `render_in`
       # This is only necessary in order to pass `self` as a block parameter
       def render_in(view_context, &block)
@@ -19,16 +32,20 @@ module Spark
         call
       end
 
-      # Override Element's render_self method when component is used as an element
-      module ElementMethods
-        def render_self
-          return @content if @content
-
-          @content = render_in(view_context, &@_block)
+      module ClassMethods
+        def inherit_template
+          define_singleton_method(:source_location) { superclass.source_location }
         end
 
-        def self.included(base)
-          base.extend(OverrideClassMethods)
+        def use_template(klass)
+          define_singleton_method(:source_location) { klass.source_location }
+        end
+      end
+
+      # Override Element's render_block method when component is used as an element
+      module ElementMethods
+        def render_block(view, &block)
+          render_in(view, &block)
         end
       end
 
@@ -46,3 +63,4 @@ module Spark
     end
   end
 end
+

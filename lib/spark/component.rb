@@ -3,18 +3,17 @@
 require_relative "element"
 require_relative "attribute"
 require_relative "tag/attrs"
-require_relative "action_view/component"
 
 module Spark
   module Component
     def self.included(base)
       base.include Spark::Attribute
       base.include Spark::Element
-
-      return unless defined?(::ActionView::Component::Base)
-
-      base.include(Spark::ActionView::Component) if base < ::ActionView::Component::Base
+      integrate(base)
     end
+
+    # Platform integrations can override this to modify class when included
+    def self.integrate(base); end
 
     # Setup attributes and elements.
     def initialize(attributes = nil, &block)

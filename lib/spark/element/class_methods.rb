@@ -103,13 +103,12 @@ module Spark
       # If an element extends a component, extend that component's class and include the necessary modules
       def extend_class(component, &config)
         base = base_class(component, &config)
-        base.include(Spark::Component)        unless base < Spark::Component
         base.include(Spark::Element::Methods) unless base < Spark::Element::Methods
+        base.include(Spark::Component)        unless base < Spark::Component
 
         if component && defined?(::ActionView::Component::Base)
-          unless base < Spark::ActionView::Component::ElementMethods
-            base.include(Spark::ActionView::Component::ElementMethods)
-          end
+          base.include(Spark::ActionView::Component::ElementMethods)
+          base.extend(Spark::ActionView::Component::OverrideClassMethods)
         end
 
         base
