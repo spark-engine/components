@@ -66,6 +66,7 @@ class TagAttrsTest < ActiveSupport::TestCase
 
     tag_attr.data.add(foo: "bar")
     assert_equal %(data-foo="bar"), tag_attr.data.to_s
+    assert_equal "bar", tag_attr.data[:foo]
     assert_equal %(aria-foo="bar" data-foo="bar" foo="bar"), tag_attr.to_s
 
     tag_attr.classname.add("foo")
