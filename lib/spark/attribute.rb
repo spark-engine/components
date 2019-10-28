@@ -149,10 +149,10 @@ module Spark
         if (choices = options.delete(:choices))
           supported_choices = choices.map { |c| c.is_a?(String) ? c.to_sym : c.to_s }.concat(choices)
 
-          choices = choices.to_sentence(last_word_connector: ", or ")
+          choices = choices.map(&:inspect).to_sentence(last_word_connector: ", or ")
           message = "\"%<value>s\" is not valid. Options for #{name} include: #{choices}"
 
-          opitons.merge(inclusion: { in: supported_choices, message: message })
+          options.merge!(inclusion: { in: supported_choices, message: message })
         end
 
         validates(name, options)

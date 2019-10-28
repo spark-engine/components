@@ -73,9 +73,10 @@ module Spark
         define_method_if_able(name) do |attributes = nil, &block|
           return get_instance_variable(multiple ? plural : name) unless attributes || block
 
-          element = klass.new(attributes, &block)
+          element = klass.new(attributes)
           element._parent = self
-          element.view_context = @view_context
+          element._block = block if block
+          element.view_context = view_context
           element.render_self
           element.validate!
 

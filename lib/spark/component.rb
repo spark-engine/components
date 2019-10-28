@@ -7,8 +7,9 @@ require_relative "tag/attrs"
 module Spark
   module Component
     def self.included(base)
-      base.include Spark::Attribute
-      base.include Spark::Element
+      base.include Spark::Attribute unless base < Spark::Attribute
+      base.include Spark::Element   unless base < Spark::Element
+      base.extend(ClassMethods)     unless base < ClassMethods
       integrate(base)
     end
 
@@ -20,6 +21,19 @@ module Spark
       initialize_attributes(attributes)
       initialize_elements
       super
+    end
+
+    def attributes
+      @attributes ||= attr_hash(*self.class.attributes.keys)
+    end
+  end
+
+  module ClassMethods
+    def model_name
+      klass = self.class
+      klass = superclass if klass == Class
+      klass = Spark::Component if klass == Class
+      ActiveModel::Name.new(klass)
     end
   end
 end
