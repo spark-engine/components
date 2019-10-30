@@ -77,7 +77,6 @@ module Spark
           element._parent = self
           element._block = block if block
           element.view_context = view_context
-          element.render_self
           element.validate!
 
           # If element supports multiple instances, inject instance
