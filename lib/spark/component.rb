@@ -10,16 +10,12 @@ module Spark
       base.include Spark::Attribute unless base < Spark::Attribute
       base.include Spark::Element   unless base < Spark::Element
       base.extend(ClassMethods)     unless base < ClassMethods
-      integrate(base)
 
-      # If an ActionView Component, inject overrides for ActionView::Spark::Component
-      return unless defined?(ActionView::Component::Base) && base < ActionView::Component::Base
-
-      base.include(ActionView::Spark::Component)
+      # If an ActionView Component, inject overrides for Integration::ActionViewComponent
+      return unless defined?(ActionView::Component::Base) 
+      
+      base.include(Integration::ActionViewComponent) if base < ActionView::Component::Base
     end
-
-    # Platform integrations can override this to modify class when included
-    def self.integrate(base); end
 
     # Setup attributes and elements.
     def initialize(attributes = nil, &block)
@@ -35,9 +31,7 @@ module Spark
 
   module ClassMethods
     def model_name
-      klass = self.class
-      klass = superclass if klass == Class
-      klass = Spark::Component if klass == Class
+      klass = [self.class, superclass, Spark::Component].reject { |k| k == Class }.first
       ActiveModel::Name.new(klass)
     end
   end

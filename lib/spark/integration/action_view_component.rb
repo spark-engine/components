@@ -1,8 +1,6 @@
-# frozen_string_literal: true
-
-module ActionView
-  module Spark
-    module Component
+module Spark
+  module Integration
+    module ActionViewComponent
       def self.included(base)
         base.extend(ClassMethods)
       end
@@ -24,10 +22,12 @@ module ActionView
       end
 
       module ClassMethods
+        # Override source_location to allow a component to uses the superclass's template
         def inherit_template
           define_singleton_method(:source_location) { superclass.source_location }
         end
 
+        # Use a template from a specific class
         def use_template(klass)
           define_singleton_method(:source_location) { klass.source_location }
         end
