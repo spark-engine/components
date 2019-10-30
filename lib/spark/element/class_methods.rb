@@ -107,9 +107,9 @@ module Spark
         base.include(Spark::Element::Methods) unless base < Spark::Element::Methods
         base.include(Spark::Component)        unless base < Spark::Component
 
-        if component && defined?(::ActionView::Component::Base)
-          base.include(Spark::ActionView::Component::ElementMethods)
-          base.extend(Spark::ActionView::Component::OverrideClassMethods)
+        if component && defined?(ActionView::Component::Base)
+          base.include(ActionView::Spark::Component::ElementMethods)
+          base.extend(ActionView::Spark::Component::OverrideClassMethods)
         end
 
         base
@@ -120,8 +120,8 @@ module Spark
           base = Class.new(component, &config)
           base.define_singleton_method(:source_component) { component }
           base
-        elsif defined?(::ActionView::Component::Base)
-          Class.new(::ActionView::Component::Base, &config)
+        elsif defined?(ActionView::Component::Base)
+          Class.new(ActionView::Component::Base, &config)
         else
           Class.new(&config)
         end

@@ -1,16 +1,7 @@
 # frozen_string_literal: true
 
-module Spark
-  module Component
-    # If an ActionView Component, inject overrides for Spark::ActionView::Component
-    def self.integrate(base)
-      return unless base < ::ActionView::Component::Base
-
-      base.include(Spark::ActionView::Component)
-    end
-  end
-
-  module ActionView
+module ActionView
+  module Spark
     module Component
       def self.included(base)
         base.extend(ClassMethods)

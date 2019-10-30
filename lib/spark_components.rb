@@ -7,7 +7,7 @@ require "spark_components/engine"
 require "spark/component"
 
 if defined?(ActionView::Component)
-  require "spark/action_view/component"
+  require "action_view/spark/component"
 end
 
 module SparkComponents

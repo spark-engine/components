@@ -11,6 +11,11 @@ module Spark
       base.include Spark::Element   unless base < Spark::Element
       base.extend(ClassMethods)     unless base < ClassMethods
       integrate(base)
+
+      # If an ActionView Component, inject overrides for ActionView::Spark::Component
+      return unless defined?(ActionView::Component::Base) && base < ActionView::Component::Base
+
+      base.include(ActionView::Spark::Component)
     end
 
     # Platform integrations can override this to modify class when included
