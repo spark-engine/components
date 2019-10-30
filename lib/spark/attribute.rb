@@ -65,7 +65,7 @@ module Spark
     # If a component or element has arguments defined as base attributes
     # they will automatically be added to the tag_attrs
     def tag_attrs
-      @tag_attrs ||= Spark::Tag::Attrs.new.add attr_hash(*BASE_ATTRIBUTES.keys)
+      @tag_attrs ||= Spark::Tag::Attr.new.add attr_hash(*BASE_ATTRIBUTES.keys)
     end
 
     # Easy reference a tag's classname

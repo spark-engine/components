@@ -90,9 +90,7 @@ module Spark
 
         return if !multiple || name == plural
 
-        # If suitable define a pluralized method name to access
-        # enumerable element instances.
-        #
+        # Define a pluralized method name to access enumerable element instances.
         define_method_if_able(plural) do
           get_instance_variable(plural)
         end

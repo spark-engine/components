@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-class TagAttrsTest < ActiveSupport::TestCase
+class TagAttrTest < ActiveSupport::TestCase
   test "Hash attribute generates html attribute format on to_s" do
     attr = Spark::Tag::Hash.new
     attr.add foo: :bar
@@ -57,8 +57,8 @@ class TagAttrsTest < ActiveSupport::TestCase
     assert_equal "blast foo bar", attr.to_s
   end
 
-  test "Tag::Attrs manages aria, class, data, and root level attributes" do
-    tag_attr = Spark::Tag::Attrs.new.add(foo: "bar")
+  test "Tag::Attr manages aria, class, data, and root level attributes" do
+    tag_attr = Spark::Tag::Attr.new.add(foo: "bar")
 
     tag_attr.aria.add(foo: "bar")
     assert_equal %(aria-foo="bar"), tag_attr.aria.to_s
@@ -75,14 +75,14 @@ class TagAttrsTest < ActiveSupport::TestCase
     assert_equal %(base-bar), tag_attr.classname.join_base("bar")
   end
 
-  test "Tag::Attrs can handle adding aria, class, data, and root level attributes together" do
+  test "Tag::Attr can handle adding aria, class, data, and root level attributes together" do
     args = { root: "val",
              data: nil,
              aria: { label: "test" },
              class: ["bar baz"],
              html: { test: "good", aria: { fun: true } } }
 
-    tag_attr = Spark::Tag::Attrs.new.add(args)
+    tag_attr = Spark::Tag::Attr.new.add(args)
 
     assert_equal({ label: "test", fun: true }, tag_attr.aria)
     assert_nil tag_attr[:data]

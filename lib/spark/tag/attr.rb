@@ -5,9 +5,10 @@ require_relative "classname"
 
 module Spark
   module Tag
-    class Attrs < Tag::Hash
+    class Attr < Tag::Hash
       def add(hash)
-        hash ||= {}
+        return self if hash.nil? || hash.keys.empty?
+
         if (html = hash.delete(:html))
           hash.deep_merge!(html)
         end

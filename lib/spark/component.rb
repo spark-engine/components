@@ -2,7 +2,7 @@
 
 require_relative "element"
 require_relative "attribute"
-require_relative "tag/attrs"
+require_relative "tag/attr"
 
 module Spark
   module Component
@@ -12,8 +12,8 @@ module Spark
       base.extend(ClassMethods)     unless base < ClassMethods
 
       # If an ActionView Component, inject overrides for Integration::ActionViewComponent
-      return unless defined?(ActionView::Component::Base) 
-      
+      return unless defined?(ActionView::Component::Base)
+
       base.include(Integration::ActionViewComponent) if base < ActionView::Component::Base
     end
 

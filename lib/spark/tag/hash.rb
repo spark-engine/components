@@ -9,7 +9,10 @@ module Spark
       end
 
       def add(hash)
-        merge!(hash) unless hash.blank?
+        return self if hash.nil? || hash.keys.empty?
+
+        dasherize_keys(hash)
+        merge!(hash)
         self
       end
 
@@ -25,6 +28,14 @@ module Spark
             array << %(#{name}="#{value}") unless value.nil?
           end
         end.sort.join(" ")
+      end
+
+      private
+
+      def dasherize_keys(hash = self)
+        hash.merge!(hash.keys.each_with_object({}) do |key, obj|
+          obj[key.to_s.gsub(/[\W_]+/, "-")] = hash.delete(key) if key.to_s.include?("_")
+        end)
       end
     end
   end
