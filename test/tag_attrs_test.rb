@@ -77,18 +77,18 @@ class TagAttrTest < ActiveSupport::TestCase
 
   test "Tag::Attr can handle adding aria, class, data, and root level attributes together" do
     args = { root: "val",
-             data: nil,
+             data: {},
              aria: { label: "test" },
              class: ["bar baz"],
-             html: { test: "good", aria: { fun: true } } }
+             html: { test: "good", aria: { fun: true }, class: "foo" } }
 
     tag_attr = Spark::Tag::Attr.new.add(args)
 
     assert_equal({ label: "test", fun: true }, tag_attr.aria)
     assert_nil tag_attr[:data]
     assert_nil tag_attr.classname.base
-    assert_equal "bar baz", tag_attr.classname.to_s
+    assert_equal "bar baz foo", tag_attr.classname.to_s
 
-    assert_equal %(aria-fun="true" aria-label="test" class="bar baz" root="val" test="good"), tag_attr.to_s
+    assert_equal %(aria-fun="true" aria-label="test" class="bar baz foo" root="val" test="good"), tag_attr.to_s
   end
 end
