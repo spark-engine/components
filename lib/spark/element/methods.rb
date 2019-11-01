@@ -16,11 +16,6 @@ module Spark
         @content = render_block(view_context, &_block)
       end
 
-      # Override this method to adapt block rendering for different platforms
-      def render_block(view, &block)
-        view.capture(self, &block)
-      end
-
       def yield
         render_self
       end

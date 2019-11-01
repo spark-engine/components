@@ -105,7 +105,6 @@ module Spark
         base.include(Spark::Component)        unless base < Spark::Component
 
         if component && defined?(ActionView::Component::Base)
-          base.include(Integration::ActionViewComponent::ElementMethods)
           base.extend(Integration::ActionViewComponent::OverrideClassMethods)
         end
 

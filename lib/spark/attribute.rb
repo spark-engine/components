@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative "tag/attr"
+
 # Allows components to easily manage their attributes
 #
 #  # Example component usage:
@@ -39,6 +41,24 @@ module Spark
       aria: {},
       html: {}
     }.freeze
+
+    def self.included(base)
+      base.extend(ClassMethods)
+    end
+
+    # Assign instance variables for attributes defined by the class
+    def initialize_attributes(attrs = nil)
+      attrs ||= {}
+
+      BASE_ATTRIBUTES.merge(self.class.attributes).each do |name, default|
+        value = attrs[name] || (default.present? ? default.dup : nil)
+        instance_variable_set(:"@#{name}", value)
+      end
+    end
+
+    def attributes
+      @attributes ||= attr_hash(*self.class.attributes.keys)
+    end
 
     # Accepts an array of instance variables and returns
     # a hash of variables with their values, if they are set.
@@ -81,20 +101,6 @@ module Spark
     # Easy reference a tag's aria attributes
     def aria
       tag_attrs.aria
-    end
-
-    # Assign instance variables for attributes defined by the class
-    def initialize_attributes(attrs = nil)
-      attrs ||= {}
-
-      BASE_ATTRIBUTES.merge(self.class.attributes).each do |name, default|
-        value = attrs[name] || (default.present? ? default.dup : nil)
-        instance_variable_set(:"@#{name}", value)
-      end
-    end
-
-    def self.included(base)
-      base.extend(ClassMethods)
     end
 
     module ClassMethods

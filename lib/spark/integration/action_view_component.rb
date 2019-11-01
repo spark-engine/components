@@ -2,7 +2,11 @@
 
 module Spark
   module Integration
-    module ActionViewComponent
+    def self.base_class
+      ActionView::Component::Base
+    end
+
+    module Component
       def self.included(base)
         base.extend(ClassMethods)
       end
@@ -18,11 +22,16 @@ module Spark
         @virtual_path ||= virtual_path
 
         # Pass self as a block parameter
-        @content = view_context.capture(self, &block) if block_given?
+        @content = render_block(view_context, &block) if block_given?
         validate!
         call
       end
 
+      def render_self
+        render_in(view_context, &_block)
+      end
+
+      # Override class methods for components
       module ClassMethods
         # Override source_location to allow a component to uses the superclass's template
         def inherit_template
@@ -34,16 +43,15 @@ module Spark
           define_singleton_method(:source_location) { klass.source_location }
         end
       end
+    end
 
-      # Override Element's render_block method when component is used as an element
-      module ElementMethods
-        def render_block(view, &block)
-          render_in(view, &block)
-        end
+    module Element
+      def self.included(base)
+        base.extend(ClassMethods)
       end
 
       # Override class methods when component is used as an element
-      module OverrideClassMethods
+      module ClassMethods
         # This is used to force components to define an initialize method
         # Overriding it means elements can defer to the original component's initialize method
         def ensure_initializer_defined; end
