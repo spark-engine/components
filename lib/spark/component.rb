@@ -7,7 +7,8 @@ module Spark
     def self.included(base)
       base.include Spark::Element unless base < Spark::Element
 
-      # If an ActionView Component, inject overrides for Integration::ActionViewComponent
+      # If an Integration is defeind include its modules if the component extends
+      # the defined base class
       return unless defined?(Spark::Integration)
 
       base.include(Spark::Integration::Component) if base < Spark::Integration.base_class

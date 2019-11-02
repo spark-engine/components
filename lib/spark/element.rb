@@ -5,9 +5,10 @@ require_relative "attribute"
 module Spark
   module Element
     class Error < StandardError; end
+
     def self.included(base)
-      base.include(Attribute)
-      base.extend(ClassMethods)
+      base.include(Spark::Attribute)
+      base.extend(Spark::Element::ClassMethods)
 
       %i[_parent _block view_context].each do |name|
         base.define_method(:"#{name}=") { |val| instance_variable_set(:"@#{name}", val) }
@@ -28,7 +29,7 @@ module Spark
     end
 
     def render_block(view, &block)
-      view.capture(self, &block)
+      block_given? ? view.capture(self, &block) : nil
     end
 
     def yield
@@ -101,15 +102,12 @@ module Spark
       #     When defining a method, you may pass an optional block to
       #     configure attributes, nested elements, or even define methods.
       #
-      def element(name, multiple: false, component: nil, &config)
+      def element(name, multiple: false, inherit_attr: nil, component: nil, &config)
         plural_name = name.to_s.pluralize.to_sym if multiple
-
-        element_class = extend_class(component, &config)
-        element_class.define_singleton_method(:component?) { component.present? }
-
+        klass = extend_class(component, &config)
         elements[name] = { multiple: plural_name }
 
-        define_element_method(name: name, plural: plural_name, multiple: multiple, klass: element_class)
+        define_element(name: name, plural: plural_name, multiple: multiple, inherit_attr: inherit_attr, klass: klass)
       end
 
       # Element method will create a new element instance, or if no
@@ -133,13 +131,15 @@ module Spark
       #       a href=item.href
       #         = item.yield
       #
-      def define_element_method(name:, plural:, multiple:, klass:)
+      def define_element(name:, plural:, multiple:, inherit_attr:, klass:)
         define_method_if_able(name) do |attributes = nil, &block|
+          attributes = attr_hash(*Array(inherit_attr)).merge(attributes || {}) if inherit_attr
+
           return get_element_variable(multiple ? plural : name) unless attributes || block
 
           element = klass.new(attributes)
           element._parent = self
-          element._block = block if block
+          element._block = block
           element.view_context = view_context
           element.validate!
 
@@ -164,18 +164,13 @@ module Spark
 
       # If an element extends a component, extend that component's class and include the necessary modules
       def extend_class(component, &config)
-        if component
-          base = Class.new(component, &config)
-          base.define_singleton_method(:source_component) { component }
-        elsif defined?(Spark::Integration)
-          base = Class.new(Spark::Integration.base_class, &config)
-          base.include(Spark::Element)
-        end
+        return Class.new(Spark::Element::Base, &config) unless component
 
-        if component && defined?(Spark::Integration)
-          base.include(Spark::Integration::Component)
-          base.include(Spark::Integration::Element)
-        end
+        base = Class.new(component, &config)
+        base.define_singleton_method(:source_component) { component }
+
+        # Override component when used as an element
+        base.include(Spark::Integration::Element) if defined?(Spark::Integration)
 
         base
       end
@@ -191,6 +186,14 @@ module Spark
 
         define_method(method_name, &block)
       end
+    end
+
+    # Base class for non-component elements
+    class Base
+      include ActiveModel::Validations
+      include Spark::Element
+
+      def initialize(*); end
     end
   end
 end
