@@ -62,6 +62,22 @@ module Spark
       instance_variable_get(:"@element_#{name}")
     end
 
+    # Override the default value for an element's attribute(s)
+    def set_element_attr_default(element, attrs = {})
+      element_default_attrs[element] = attrs
+    end
+
+    def element_attr_default
+      @element_attr_default ||= {}
+    end
+
+    # Merge user defined attributes with the overriden attributes of an element
+    def merge_element_attr_default(name, attributes)
+      attrs = element_attr_default[name]
+      attributes = attrs.merge(attributes || {}) unless attrs.nil? || attrs.empty?
+      attributes
+    end
+
     module ClassMethods
       def model_name
         klass = [self.class, superclass, Spark::Component].reject { |k| k == Class }.first
@@ -102,12 +118,12 @@ module Spark
       #     When defining a method, you may pass an optional block to
       #     configure attributes, nested elements, or even define methods.
       #
-      def element(name, multiple: false, inherit_attr: nil, component: nil, &config)
+      def element(name, multiple: false, component: nil, &config)
         plural_name = name.to_s.pluralize.to_sym if multiple
         klass = extend_class(component, &config)
         elements[name] = { multiple: plural_name }
 
-        define_element(name: name, plural: plural_name, multiple: multiple, inherit_attr: inherit_attr, klass: klass)
+        define_element(name: name, plural: plural_name, multiple: multiple, klass: klass)
       end
 
       # Element method will create a new element instance, or if no
@@ -131,11 +147,11 @@ module Spark
       #       a href=item.href
       #         = item.yield
       #
-      def define_element(name:, plural:, multiple:, inherit_attr:, klass:)
+      def define_element(name:, plural:, multiple:,  klass:)
         define_method_if_able(name) do |attributes = nil, &block|
-          attributes = attr_hash(*Array(inherit_attr)).merge(attributes || {}) if inherit_attr
+          return get_element_variable(multiple ? plural : name) unless block || attributes
 
-          return get_element_variable(multiple ? plural : name) unless attributes || block
+          attributes = merge_element_attr_default(name, attributes)
 
           element = klass.new(attributes)
           element._parent = self
@@ -193,7 +209,10 @@ module Spark
       include ActiveModel::Validations
       include Spark::Element
 
-      def initialize(*); end
+      def initialize(attributes)
+        initialize_attributes(attributes)
+        initialize_elements
+      end
     end
   end
 end
