@@ -163,10 +163,6 @@ module Spark
 
         validates(name, options)
       end
-
-      def inherited(child)
-        child.attributes.reverse_merge! attributes
-      end
     end
   end
 end

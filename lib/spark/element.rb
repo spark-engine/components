@@ -79,6 +79,11 @@ module Spark
     end
 
     module ClassMethods
+      def inherited(child)
+        child.elements.reverse_merge! elements
+        child.attributes.reverse_merge! attributes
+      end
+
       def model_name
         klass = [self.class, superclass, Spark::Component].reject { |k| k == Class }.first
         ActiveModel::Name.new(klass)
