@@ -64,7 +64,7 @@ module Spark
 
     # Override the default value for an element's attribute(s)
     def set_element_attr_default(element, attrs = {})
-      element_default_attrs[element] = attrs
+      element_attr_default[element] = attrs
     end
 
     def element_attr_default
