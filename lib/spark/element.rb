@@ -26,6 +26,8 @@ module Spark
       return @content unless @content.nil?
 
       @content = render_block(view_context, &_block)
+      validate!
+      @content
     end
 
     def render_block(view, &block)
@@ -162,7 +164,6 @@ module Spark
           element._parent = self
           element._block = block
           element.view_context = view_context
-          element.validate!
 
           # If element supports multiple instances, inject instance
           # into array for later enumeration
