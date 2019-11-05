@@ -19,10 +19,12 @@ Metrics/AbcSize:
 Metrics/BlockLength:
   Exclude:
     - 'test/**/*.rb'
+    - 'testold/**/*'
 
 Metrics/ClassLength:
   Exclude:
     - 'test/**/*.rb'
+    - 'testold/**/*'
     - 'lib/spark_components/element.rb'
 
 Layout/TrailingBlankLines:
@@ -37,15 +39,15 @@ Style/Documentation:
 
 Style/ClassAndModuleChildren:
   Exclude:
-    - 'test/tmp/app/components/baz/foobar_component.rb'
+    - 'testold/tmp/app/components/baz/foobar_component.rb'
 
 Style/IfUnlessModifier:
   Enabled: false
 
 Style/MixinUsage:
   Exclude:
-    - 'test/dummy/bin/setup'
-    - 'test/dummy/bin/update'
+    - 'testold/dummy/bin/setup'
+    - 'testold/dummy/bin/update'
 
 Style/StringLiterals:
   EnforcedStyle: double_quotes
@@ -53,4 +55,5 @@ Style/StringLiterals:
 Style/FrozenStringLiteralComment:
   Exclude:
     - 'test/**/*.rb'
+    - 'testold/**/*'
 

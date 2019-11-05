@@ -32,7 +32,7 @@ module Spark
 
       private
 
-      def dasherize_keys(hash = self)
+      def dasherize_keys(hash)
         hash.merge!(hash.keys.each_with_object({}) do |key, obj|
           obj[key.to_s.gsub(/[\W_]+/, "-")] = hash.delete(key) if key.to_s.include?("_")
         end)
