@@ -9,7 +9,7 @@ module Spark
       parallelize_me!
 
       def test_html_attrbute_format_on_to_s
-        hash = {}
+        hash = Hash.new
         hash.add foo: :bar
 
         assert_equal %(foo="bar"), hash.to_s
@@ -28,7 +28,7 @@ module Spark
       end
 
       def test_dasherize_keys
-        hash = {}
+        hash = Hash.new
 
         hash.add(foo_bar: :baz)
 
