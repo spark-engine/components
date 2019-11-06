@@ -4,5 +4,4 @@ require "pathname"
 root_path = Pathname(File.expand_path("..", __dir__))
 $LOAD_PATH.unshift root_path.join("lib").to_s
 require "minitest/autorun"
-require "active_model"
 require "action_view/component/test_helpers"

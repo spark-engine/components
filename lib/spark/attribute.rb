@@ -51,13 +51,16 @@ module Spark
       attrs ||= {}
 
       BASE_ATTRIBUTES.merge(self.class.attributes).each do |name, default|
-        value = attrs[name] || (default.present? ? default.dup : nil)
-        instance_variable_set(:"@#{name}", value)
+        value = attrs[name] || (!default.nil? ? default.dup : nil)
+        unless value.nil? || value.respond_to?(:empty?) && value.empty?
+          instance_variable_set(:"@#{name}", value)
+          attributes[name] = value
+        end
       end
     end
 
     def attributes
-      @attributes ||= attr_hash(*self.class.attributes.keys)
+      @attributes ||= {}
     end
 
     # Accepts an array of instance variables and returns

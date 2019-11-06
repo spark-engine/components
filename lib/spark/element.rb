@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "active_model"
 require_relative "attribute"
 
 module Spark
@@ -82,8 +83,8 @@ module Spark
 
     module ClassMethods
       def inherited(child)
-        child.elements.reverse_merge! elements
-        child.attributes.reverse_merge! attributes
+        child.elements.replace(elements.merge(child.elements))
+        child.attributes.replace(attributes.merge(child.attributes))
       end
 
       def model_name
@@ -101,7 +102,7 @@ module Spark
       #
       #   name: Symbol
       #
-      #     Create a method for interacting with an elemnt
+      #     Create a method for interacting with an element
       #     This name cannot be the same as another instance method
       #
       #   multiple: Boolean (default: false)
