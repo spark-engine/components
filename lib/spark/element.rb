@@ -27,7 +27,7 @@ module Spark
       return @content unless @content.nil?
 
       @content = render_block(view_context, &_block)
-      validate!
+      validate! if defined?(ActiveModel::Validations)
       @content
     end
 
@@ -85,11 +85,6 @@ module Spark
       def inherited(child)
         child.elements.replace(elements.merge(child.elements))
         child.attributes.replace(attributes.merge(child.attributes))
-      end
-
-      def model_name
-        klass = [self.class, superclass, Spark::Component].reject { |k| k == Class }.first
-        ActiveModel::Name.new(klass)
       end
 
       def elements
@@ -183,6 +178,16 @@ module Spark
         end
       end
 
+      if defined?(ActiveModel::Validation)
+        # ActiveModel validations require a model_name. This helps dynamic class creation
+        # connect new classes to their proper model names.
+        def model_name
+          # try the current class, the parent class, or default to Spark::Component
+          klass = [self.class, superclass, Spark::Component].reject { |k| k == Class }.first
+          ActiveModel::Name.new(klass)
+        end
+      end
+
       private
 
       # If an element extends a component, extend that component's class and include the necessary modules
@@ -213,7 +218,7 @@ module Spark
 
     # Base class for non-component elements
     class Base
-      include ActiveModel::Validations
+      include ActiveModel::Validations if defined?(ActiveModel::Validations)
       include Spark::Element
 
       def initialize(attributes)

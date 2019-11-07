@@ -52,7 +52,7 @@ module Spark
 
       BASE_ATTRIBUTES.merge(self.class.attributes).each do |name, default|
         value = attrs[name] || (!default.nil? ? default.dup : nil)
-        unless value.nil? || value.respond_to?(:empty?) && value.empty?
+        if set?(value)
           instance_variable_set(:"@#{name}", value)
           attributes[name] = value
         end
@@ -106,6 +106,15 @@ module Spark
       tag_attrs.aria
     end
 
+    private
+
+    # Help filter out attributes with blank values.
+    # Not using `blank?` to avoid Rails requirement
+    # and because `false` is a valid value.
+    def set?(value)
+      !(value.nil? || value.respond_to?(:empty?) && value.empty?)
+    end
+
     module ClassMethods
       def attributes
         @attributes ||= {}
@@ -130,6 +139,33 @@ module Spark
         end
       end
 
+      # A namespaced passthrough for validating attributes
+      #
+      # Option: `choices` - easily validate against an array
+      #   Essentially a simplification of `inclusion` for attributes.
+      #
+      # Examples:
+      #   - validates_attr(:size, choices: %i[small medium large])
+      #   - validates_attr(:size, choices: SIZES, allow_blank: true)
+      #
+      def validates_attr(name, options = {})
+        # TODO: Figure out how to properly include this method if ActiveModel is included
+        raise "Requires active_model" if defined?(ActiveModel::Validation)
+
+        name = :"attribute_#{name}"
+
+        if (choices = options.delete(:choices))
+          supported_choices = choices.map { |c| c.is_a?(String) ? c.to_sym : c.to_s }.concat(choices)
+
+          choices = choices.map(&:inspect).to_sentence(last_word_connector: ", or ")
+          message = "\"%<value>s\" is not valid. Options include: #{choices}."
+
+          options.merge!(inclusion: { in: supported_choices, message: message })
+        end
+
+        validates(name, options)
+      end
+
       private
 
       # Store attributes and define methods for validation
@@ -141,30 +177,6 @@ module Spark
         define_method(:"attribute_#{name}") do
           instance_variable_get(:"@#{name}")
         end
-      end
-
-      # A namespaced passthrough for validating attributes
-      #
-      # Option: `choices` - easily validate against an array
-      #   Essentially a simplification of `inclusion` for attributes.
-      #
-      # Examples:
-      #   - validates_attr(:size, choices: %i[small medium large])
-      #   - validates_attr(:size, choices: SIZES, allow_blank: true)
-      #
-      def validates_attr(name, options = {})
-        name = :"attribute_#{name}"
-
-        if (choices = options.delete(:choices))
-          supported_choices = choices.map { |c| c.is_a?(String) ? c.to_sym : c.to_s }.concat(choices)
-
-          choices = choices.map(&:inspect).to_sentence(last_word_connector: ", or ")
-          message = "\"%<value>s\" is not valid. Options for #{name} include: #{choices}"
-
-          options.merge!(inclusion: { in: supported_choices, message: message })
-        end
-
-        validates(name, options)
       end
     end
   end
