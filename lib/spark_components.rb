@@ -6,10 +6,6 @@ require "spark_components/component"
 require "spark_components/engine"
 require "spark/component"
 
-if defined?(ActionView::Component::Base)
-  require "spark/integration/action_view_component"
-end
-
 module SparkComponents
   class Error < StandardError; end
 

@@ -1,0 +1,497 @@
+-------------------------------------------------
+Spark::ElementIntegrationTest: test_render_inline
+-------------------------------------------------
+Started GET "/element" for 127.0.0.1 at 2019-11-07 22:09:28 -0600
+-------------------------------------------------
+Spark::ElementIntegrationTest: test_render_inline
+-------------------------------------------------
+Started GET "/element" for 127.0.0.1 at 2019-11-07 22:10:35 -0600
+Processing by ApplicationController#show as HTML
+  Parameters: {"path"=>"element"}
+  Rendering application/element.html.slim
+  Rendered application/element.html.slim (Duration: 12.4ms | Allocations: 13137)
+Completed 500 Internal Server Error in 18ms (Allocations: 16048)
+--------------------------------------------------
+Spark::ElementIntegrationTest: test_render_element
+--------------------------------------------------
+Started GET "/element" for 127.0.0.1 at 2019-11-07 22:13:03 -0600
+Processing by ApplicationController#show as HTML
+  Parameters: {"path"=>"element"}
+  Rendering application/element.html.slim
+  Rendered application/element.html.slim (Duration: 11.9ms | Allocations: 13136)
+Completed 500 Internal Server Error in 18ms (Allocations: 16031)
+--------------------------------------------------
+Spark::ElementIntegrationTest: test_render_element
+--------------------------------------------------
+Started GET "/element" for 127.0.0.1 at 2019-11-07 22:13:32 -0600
+Processing by ApplicationController#show as HTML
+  Parameters: {"path"=>"element"}
+  Rendering application/element.html.slim
+  Rendered application/element.html.slim (Duration: 13.2ms | Allocations: 13803)
+Completed 500 Internal Server Error in 18ms (Allocations: 16022)
+--------------------------------------------------
+Spark::ElementIntegrationTest: test_render_element
+--------------------------------------------------
+Started GET "/element" for 127.0.0.1 at 2019-11-07 22:16:40 -0600
+Processing by ApplicationController#show as HTML
+  Parameters: {"path"=>"element"}
+  Rendering application/element.html.slim
+  Rendered application/element.html.slim (Duration: 12.2ms | Allocations: 13134)
+Completed 500 Internal Server Error in 17ms (Allocations: 16021)
+--------------------------------------------------
+Spark::ElementIntegrationTest: test_render_element
+--------------------------------------------------
+Started GET "/element" for 127.0.0.1 at 2019-11-07 22:16:55 -0600
+Processing by ApplicationController#show as HTML
+  Parameters: {"path"=>"element"}
+  Rendering application/element.html.slim
+  Rendered application/element.html.slim (Duration: 12.2ms | Allocations: 13137)
+Completed 500 Internal Server Error in 18ms (Allocations: 16032)
+--------------------------------------------------
+Spark::ElementIntegrationTest: test_render_element
+--------------------------------------------------
+Started GET "/element" for 127.0.0.1 at 2019-11-07 22:17:09 -0600
+Processing by ApplicationController#show as HTML
+  Parameters: {"path"=>"element"}
+  Rendering application/element.html.slim
+  Rendered application/element.html.slim (Duration: 12.2ms | Allocations: 13329)
+Completed 500 Internal Server Error in 17ms (Allocations: 16031)
+--------------------------------------------------
+Spark::ElementIntegrationTest: test_render_element
+--------------------------------------------------
+Started GET "/element" for 127.0.0.1 at 2019-11-07 22:18:06 -0600
+Processing by ApplicationController#show as HTML
+  Parameters: {"path"=>"element"}
+  Rendering application/element.html.slim
+  Rendered application/element.html.slim (Duration: 12.1ms | Allocations: 13240)
+Completed 500 Internal Server Error in 17ms (Allocations: 16033)
+--------------------------------------------------
+Spark::ElementIntegrationTest: test_render_element
+--------------------------------------------------
+Started GET "/element" for 127.0.0.1 at 2019-11-07 22:18:24 -0600
+Processing by ApplicationController#show as HTML
+  Parameters: {"path"=>"element"}
+  Rendering application/element.html.slim
+  Rendered application/element.html.slim (Duration: 12.0ms | Allocations: 13134)
+Completed 500 Internal Server Error in 17ms (Allocations: 16061)
+--------------------------------------------------
+Spark::ElementIntegrationTest: test_render_element
+--------------------------------------------------
+Started GET "/element" for 127.0.0.1 at 2019-11-07 22:18:46 -0600
+Processing by ApplicationController#show as HTML
+  Parameters: {"path"=>"element"}
+  Rendering application/element.html.slim
+  Rendered application/element.html.slim (Duration: 19.0ms | Allocations: 13642)
+Completed 500 Internal Server Error in 25ms (Allocations: 16537)
+--------------------------------------------------
+Spark::ElementIntegrationTest: test_render_element
+--------------------------------------------------
+Started GET "/element" for 127.0.0.1 at 2019-11-07 22:20:04 -0600
+Processing by ApplicationController#show as HTML
+  Parameters: {"path"=>"element"}
+  Rendering application/element.html.slim
+  Rendered application/element.html.slim (Duration: 17.7ms | Allocations: 14773)
+Completed 500 Internal Server Error in 22ms (Allocations: 16545)
+--------------------------------------------------
+Spark::ElementIntegrationTest: test_render_element
+--------------------------------------------------
+Started GET "/element" for 127.0.0.1 at 2019-11-07 22:20:38 -0600
+Processing by ApplicationController#show as HTML
+  Parameters: {"path"=>"element"}
+  Rendering application/element.html.slim
+  Rendered application/element.html.slim (Duration: 12.7ms | Allocations: 12759)
+Completed 200 OK in 17ms (Views: 14.1ms | Allocations: 14748)
+--------------------------------------------------
+Spark::ElementIntegrationTest: test_render_element
+--------------------------------------------------
+Started GET "/element" for 127.0.0.1 at 2019-11-07 22:21:02 -0600
+Processing by ApplicationController#show as HTML
+  Parameters: {"path"=>"element"}
+  Rendering application/element.html.slim
+  Rendered application/element.html.slim (Duration: 13.2ms | Allocations: 13271)
+Completed 500 Internal Server Error in 18ms (Allocations: 16025)
+--------------------------------------------------
+Spark::ElementIntegrationTest: test_render_element
+--------------------------------------------------
+Started GET "/element" for 127.0.0.1 at 2019-11-07 22:22:35 -0600
+Processing by ApplicationController#show as HTML
+  Parameters: {"path"=>"element"}
+  Rendering application/element.html.slim
+  Rendered application/element.html.slim (Duration: 12.4ms | Allocations: 13134)
+Completed 500 Internal Server Error in 18ms (Allocations: 16041)
+--------------------------------------------------
+Spark::ElementIntegrationTest: test_render_element
+--------------------------------------------------
+Started GET "/element" for 127.0.0.1 at 2019-11-07 22:22:45 -0600
+Processing by ApplicationController#show as HTML
+  Parameters: {"path"=>"element"}
+  Rendering application/element.html.slim
+  Rendered application/element.html.slim (Duration: 12.1ms | Allocations: 13134)
+Completed 500 Internal Server Error in 17ms (Allocations: 16048)
+--------------------------------------------------
+Spark::ElementIntegrationTest: test_render_element
+--------------------------------------------------
+Started GET "/element" for 127.0.0.1 at 2019-11-07 22:22:55 -0600
+Processing by ApplicationController#show as HTML
+  Parameters: {"path"=>"element"}
+  Rendering application/element.html.slim
+  Rendered application/element.html.slim (Duration: 13.0ms | Allocations: 13551)
+Completed 500 Internal Server Error in 18ms (Allocations: 16256)
+--------------------------------------------------
+Spark::ElementIntegrationTest: test_render_element
+--------------------------------------------------
+Started GET "/element" for 127.0.0.1 at 2019-11-07 22:23:08 -0600
+Processing by ApplicationController#show as HTML
+  Parameters: {"path"=>"element"}
+  Rendering application/element.html.slim
+  Rendered application/element.html.slim (Duration: 11.9ms | Allocations: 13306)
+Completed 500 Internal Server Error in 18ms (Allocations: 16256)
+--------------------------------------------------
+Spark::ElementIntegrationTest: test_render_element
+--------------------------------------------------
+Started GET "/element" for 127.0.0.1 at 2019-11-07 22:24:16 -0600
+Processing by ApplicationController#show as HTML
+  Parameters: {"path"=>"element"}
+  Rendering application/element.html.slim
+  Rendered application/element.html.slim (Duration: 11.6ms | Allocations: 12005)
+Completed 200 OK in 18ms (Views: 14.2ms | Allocations: 15133)
+--------------------------------------------------
+Spark::ElementIntegrationTest: test_render_element
+--------------------------------------------------
+Started GET "/element" for 127.0.0.1 at 2019-11-07 22:24:32 -0600
+Processing by ApplicationController#show as HTML
+  Parameters: {"path"=>"element"}
+  Rendering application/element.html.slim
+  Rendered application/element.html.slim (Duration: 12.8ms | Allocations: 13164)
+Completed 200 OK in 17ms (Views: 14.4ms | Allocations: 14934)
+--------------------------------------------------
+Spark::ElementIntegrationTest: test_render_element
+--------------------------------------------------
+Started GET "/element" for 127.0.0.1 at 2019-11-07 22:25:48 -0600
+Processing by ApplicationController#show as HTML
+  Parameters: {"path"=>"element"}
+  Rendering application/element.html.slim
+  Rendered application/element.html.slim (Duration: 13.3ms | Allocations: 13160)
+Completed 200 OK in 17ms (Views: 14.7ms | Allocations: 15151)
+--------------------------------------------------
+Spark::ElementIntegrationTest: test_render_element
+--------------------------------------------------
+Started GET "/element" for 127.0.0.1 at 2019-11-07 22:52:32 -0600
+Processing by ApplicationController#show as HTML
+  Parameters: {"path"=>"element"}
+Completed 500 Internal Server Error in 6ms (Allocations: 2751)
+--------------------------------------------------
+Spark::ElementIntegrationTest: test_render_element
+--------------------------------------------------
+Started GET "/element/block" for 127.0.0.1 at 2019-11-07 22:54:10 -0600
+Processing by ApplicationController#show as HTML
+  Parameters: {"path"=>"element/block"}
+  Rendering application/element/block.html.slim
+  Rendered application/element/block.html.slim (Duration: 4.8ms | Allocations: 3798)
+Completed 500 Internal Server Error in 14ms (Allocations: 15029)
+--------------------------------------------------
+Spark::ElementIntegrationTest: test_render_element
+--------------------------------------------------
+Started GET "/element/block" for 127.0.0.1 at 2019-11-07 22:54:32 -0600
+Processing by ApplicationController#show as HTML
+  Parameters: {"path"=>"element/block"}
+  Rendering application/element/block.html.slim
+  Rendered application/element/block.html.slim (Duration: 1.6ms | Allocations: 1987)
+Completed 200 OK in 12ms (Views: 8.5ms | Allocations: 14302)
+--------------------------------------------------
+Spark::ElementIntegrationTest: test_render_element
+--------------------------------------------------
+Started GET "/element/block" for 127.0.0.1 at 2019-11-07 22:54:57 -0600
+Processing by ApplicationController#show as HTML
+  Parameters: {"path"=>"element/block"}
+  Rendering application/element/block.html.slim
+  Rendered application/element/block.html.slim (Duration: 11.5ms | Allocations: 13162)
+Completed 200 OK in 15ms (Views: 13.1ms | Allocations: 14937)
+--------------------------------------------------
+Spark::ElementIntegrationTest: test_render_element
+--------------------------------------------------
+Started GET "/element/block" for 127.0.0.1 at 2019-11-07 22:55:07 -0600
+Processing by ApplicationController#show as HTML
+  Parameters: {"path"=>"element/block"}
+  Rendering application/element/block.html.slim
+  Rendered application/element/block.html.slim (Duration: 2.5ms | Allocations: 2267)
+Completed 200 OK in 12ms (Views: 8.4ms | Allocations: 13510)
+--------------------------------------------------
+Spark::ElementIntegrationTest: test_render_element
+--------------------------------------------------
+Started GET "/element/block" for 127.0.0.1 at 2019-11-07 22:55:12 -0600
+Processing by ApplicationController#show as HTML
+  Parameters: {"path"=>"element/block"}
+  Rendering application/element/block.html.slim
+  Rendered application/element/block.html.slim (Duration: 2.2ms | Allocations: 2259)
+Completed 200 OK in 11ms (Views: 8.9ms | Allocations: 13763)
+--------------------------------------------------
+Spark::ElementIntegrationTest: test_render_element
+--------------------------------------------------
+Started GET "/element/block" for 127.0.0.1 at 2019-11-07 22:55:28 -0600
+Processing by ApplicationController#show as HTML
+  Parameters: {"path"=>"element/block"}
+  Rendering application/element/block.html.slim
+  Rendered application/element/block.html.slim (Duration: 1.4ms | Allocations: 1796)
+Completed 200 OK in 12ms (Views: 3.4ms | Allocations: 14247)
+--------------------------------------------------
+Spark::ElementIntegrationTest: test_render_element
+--------------------------------------------------
+Started GET "/element/block" for 127.0.0.1 at 2019-11-07 22:55:55 -0600
+Processing by ApplicationController#show as HTML
+  Parameters: {"path"=>"element/block"}
+  Rendering application/element/block.html.slim
+  Rendered application/element/block.html.slim (Duration: 8.9ms | Allocations: 12231)
+Completed 200 OK in 13ms (Views: 10.7ms | Allocations: 14203)
+--------------------------------------------------
+Spark::ElementIntegrationTest: test_render_element
+--------------------------------------------------
+Started GET "/element/block" for 127.0.0.1 at 2019-11-07 22:56:07 -0600
+Processing by ApplicationController#show as HTML
+  Parameters: {"path"=>"element/block"}
+  Rendering application/element/block.html.slim
+  Rendered application/element/block.html.slim (Duration: 2.5ms | Allocations: 2353)
+Completed 200 OK in 12ms (Views: 8.4ms | Allocations: 13726)
+--------------------------------------------------
+Spark::ElementIntegrationTest: test_render_element
+--------------------------------------------------
+Started GET "/element/block" for 127.0.0.1 at 2019-11-07 22:56:13 -0600
+Processing by ApplicationController#show as HTML
+  Parameters: {"path"=>"element/block"}
+  Rendering application/element/block.html.slim
+  Rendered application/element/block.html.slim (Duration: 1.7ms | Allocations: 1796)
+Completed 200 OK in 5ms (Views: 3.0ms | Allocations: 3189)
+--------------------------------------------------
+Spark::ElementIntegrationTest: test_render_element
+--------------------------------------------------
+Started GET "/element/block" for 127.0.0.1 at 2019-11-07 22:56:42 -0600
+Processing by ApplicationController#show as HTML
+  Parameters: {"path"=>"element/block"}
+  Rendering application/element/block.html.slim
+  Rendered application/element/block.html.slim (Duration: 1.8ms | Allocations: 1796)
+Completed 200 OK in 5ms (Views: 3.2ms | Allocations: 3189)
+--------------------------------------------------
+Spark::ElementIntegrationTest: test_render_element
+--------------------------------------------------
+Started GET "/element/block" for 127.0.0.1 at 2019-11-07 23:00:45 -0600
+Processing by ApplicationController#show as HTML
+  Parameters: {"path"=>"element/block"}
+  Rendering application/element/block.html.slim
+  Rendered application/element/block.html.slim (Duration: 30.5ms | Allocations: 289282)
+Completed 200 OK in 36ms (Views: 33.2ms | Allocations: 328893)
+--------------------------------------------------
+Spark::ElementIntegrationTest: test_render_element
+--------------------------------------------------
+Started GET "/element/block" for 127.0.0.1 at 2019-11-07 23:03:19 -0600
+Processing by ApplicationController#show as HTML
+  Parameters: {"path"=>"element/block"}
+  Rendering application/element/block.html.slim
+  Rendered application/element/block.html.slim (Duration: 5.1ms | Allocations: 1808)
+Completed 200 OK in 10ms (Views: 7.2ms | Allocations: 3201)
+--------------------------------------------------
+Spark::ElementIntegrationTest: test_render_element
+--------------------------------------------------
+Started GET "/element/block" for 127.0.0.1 at 2019-11-07 23:03:21 -0600
+Processing by ApplicationController#show as HTML
+  Parameters: {"path"=>"element/block"}
+  Rendering application/element/block.html.slim
+  Rendered application/element/block.html.slim (Duration: 1.8ms | Allocations: 1796)
+Completed 200 OK in 5ms (Views: 3.2ms | Allocations: 3189)
+--------------------------------------------------
+Spark::ElementIntegrationTest: test_render_element
+--------------------------------------------------
+Started GET "/element/block" for 127.0.0.1 at 2019-11-07 23:03:52 -0600
+Processing by ApplicationController#show as HTML
+  Parameters: {"path"=>"element/block"}
+  Rendering application/element/block.html.slim
+  Rendered application/element/block.html.slim (Duration: 1.6ms | Allocations: 1796)
+Completed 200 OK in 4ms (Views: 2.9ms | Allocations: 3189)
+--------------------------------------------------
+Spark::ElementIntegrationTest: test_render_element
+--------------------------------------------------
+Started GET "/element/block" for 127.0.0.1 at 2019-11-07 23:05:40 -0600
+Processing by ApplicationController#show as HTML
+  Parameters: {"path"=>"element/block"}
+  Rendering application/element/block.html.slim
+  Rendered application/element/block.html.slim (Duration: 2.2ms | Allocations: 1805)
+Completed 200 OK in 6ms (Views: 3.9ms | Allocations: 3198)
+--------------------------------------------------
+Spark::ElementIntegrationTest: test_render_element
+--------------------------------------------------
+Started GET "/element/block" for 127.0.0.1 at 2019-11-07 23:06:07 -0600
+Processing by ApplicationController#show as HTML
+  Parameters: {"path"=>"element/block"}
+  Rendering application/element/block.html.slim
+  Rendered application/element/block.html.slim (Duration: 2.0ms | Allocations: 1805)
+Completed 200 OK in 5ms (Views: 3.5ms | Allocations: 3198)
+--------------------------------------------------
+Spark::ElementIntegrationTest: test_render_element
+--------------------------------------------------
+Started GET "/element/block" for 127.0.0.1 at 2019-11-07 23:06:57 -0600
+Processing by ApplicationController#show as HTML
+  Parameters: {"path"=>"element/block"}
+  Rendering application/element/block.html.slim
+  Rendered application/element/block.html.slim (Duration: 2.4ms | Allocations: 1805)
+Completed 200 OK in 6ms (Views: 4.0ms | Allocations: 3198)
+--------------------------------------------------
+Spark::ElementIntegrationTest: test_render_element
+--------------------------------------------------
+Started GET "/element/block" for 127.0.0.1 at 2019-11-07 23:07:10 -0600
+Processing by ApplicationController#show as HTML
+  Parameters: {"path"=>"element/block"}
+  Rendering application/element/block.html.slim
+  Rendered application/element/block.html.slim (Duration: 1.7ms | Allocations: 1805)
+Completed 200 OK in 4ms (Views: 2.8ms | Allocations: 3198)
+--------------------------------------------------
+Spark::ElementIntegrationTest: test_render_element
+--------------------------------------------------
+Started GET "/element/block" for 127.0.0.1 at 2019-11-07 23:07:48 -0600
+Processing by ApplicationController#show as HTML
+  Parameters: {"path"=>"element/block"}
+  Rendering application/element/block.html.slim
+  Rendered application/element/block.html.slim (Duration: 2.2ms | Allocations: 1805)
+Completed 200 OK in 5ms (Views: 3.5ms | Allocations: 3198)
+--------------------------------------------------
+Spark::ElementIntegrationTest: test_render_element
+--------------------------------------------------
+Started GET "/element/block" for 127.0.0.1 at 2019-11-07 23:09:04 -0600
+Processing by ApplicationController#show as HTML
+  Parameters: {"path"=>"element/block"}
+  Rendering application/element/block.html.slim
+  Rendered application/element/block.html.slim (Duration: 1.8ms | Allocations: 1805)
+Completed 200 OK in 5ms (Views: 3.0ms | Allocations: 3356)
+--------------------------------------------------
+Spark::ElementIntegrationTest: test_render_element
+--------------------------------------------------
+Started GET "/element/block" for 127.0.0.1 at 2019-11-07 23:09:25 -0600
+Processing by ApplicationController#show as HTML
+  Parameters: {"path"=>"element/block"}
+  Rendering application/element/block.html.slim
+  Rendered application/element/block.html.slim (Duration: 1.6ms | Allocations: 1805)
+Completed 200 OK in 4ms (Views: 2.9ms | Allocations: 3198)
+--------------------------------------------------
+Spark::ElementIntegrationTest: test_render_element
+--------------------------------------------------
+Started GET "/element/block" for 127.0.0.1 at 2019-11-07 23:10:36 -0600
+Processing by ApplicationController#show as HTML
+  Parameters: {"path"=>"element/block"}
+  Rendering application/element/block.html.slim
+  Rendered application/element/block.html.slim (Duration: 1.7ms | Allocations: 1805)
+Completed 200 OK in 4ms (Views: 3.0ms | Allocations: 3198)
+--------------------------------------------------
+Spark::ElementIntegrationTest: test_render_element
+--------------------------------------------------
+Started GET "/element/block" for 127.0.0.1 at 2019-11-07 23:10:54 -0600
+Processing by ApplicationController#show as HTML
+  Parameters: {"path"=>"element/block"}
+  Rendering application/element/block.html.slim
+  Rendered application/element/block.html.slim (Duration: 1.9ms | Allocations: 1805)
+Completed 200 OK in 6ms (Views: 3.7ms | Allocations: 3198)
+--------------------------------------------------
+Spark::ElementIntegrationTest: test_render_element
+--------------------------------------------------
+Started GET "/element/block" for 127.0.0.1 at 2019-11-07 23:11:04 -0600
+Processing by ApplicationController#show as HTML
+  Parameters: {"path"=>"element/block"}
+  Rendering application/element/block.html.slim
+  Rendered application/element/block.html.slim (Duration: 1.9ms | Allocations: 1805)
+Completed 200 OK in 6ms (Views: 3.4ms | Allocations: 3899)
+--------------------------------------------------
+Spark::ElementIntegrationTest: test_render_element
+--------------------------------------------------
+Started GET "/element/block" for 127.0.0.1 at 2019-11-07 23:11:12 -0600
+Processing by ApplicationController#show as HTML
+  Parameters: {"path"=>"element/block"}
+  Rendering application/element/block.html.slim
+  Rendered application/element/block.html.slim (Duration: 2.1ms | Allocations: 1805)
+Completed 200 OK in 5ms (Views: 3.6ms | Allocations: 3198)
+--------------------------------------------------
+Spark::ElementIntegrationTest: test_render_element
+--------------------------------------------------
+Started GET "/element/block" for 127.0.0.1 at 2019-11-07 23:11:27 -0600
+Processing by ApplicationController#show as HTML
+  Parameters: {"path"=>"element/block"}
+  Rendering application/element/block.html.slim
+  Rendered application/element/block.html.slim (Duration: 1.7ms | Allocations: 1805)
+Completed 200 OK in 5ms (Views: 3.1ms | Allocations: 3198)
+--------------------------------------------------
+Spark::ElementIntegrationTest: test_render_element
+--------------------------------------------------
+Started GET "/element/block" for 127.0.0.1 at 2019-11-07 23:15:51 -0600
+Processing by ApplicationController#show as HTML
+  Parameters: {"path"=>"element/block"}
+  Rendering application/element/block.html.slim
+  Rendered application/element/block.html.slim (Duration: 1.9ms | Allocations: 1811)
+Completed 200 OK in 6ms (Views: 3.6ms | Allocations: 3204)
+--------------------------------------------------
+Spark::ElementIntegrationTest: test_render_element
+--------------------------------------------------
+Started GET "/element/block" for 127.0.0.1 at 2019-11-07 23:16:40 -0600
+Processing by ApplicationController#show as HTML
+  Parameters: {"path"=>"element/block"}
+  Rendering application/element/block.html.slim
+  Rendered application/element/block.html.slim (Duration: 2.1ms | Allocations: 1811)
+Completed 200 OK in 7ms (Views: 4.0ms | Allocations: 3204)
+--------------------------------------------------
+Spark::ElementIntegrationTest: test_render_element
+--------------------------------------------------
+Started GET "/element/block" for 127.0.0.1 at 2019-11-07 23:16:52 -0600
+Processing by ApplicationController#show as HTML
+  Parameters: {"path"=>"element/block"}
+  Rendering application/element/block.html.slim
+  Rendered application/element/block.html.slim (Duration: 1.9ms | Allocations: 1805)
+Completed 200 OK in 5ms (Views: 3.2ms | Allocations: 3198)
+--------------------------------------------------
+Spark::ElementIntegrationTest: test_render_element
+--------------------------------------------------
+Started GET "/element/block" for 127.0.0.1 at 2019-11-07 23:17:45 -0600
+Processing by ApplicationController#show as HTML
+  Parameters: {"path"=>"element/block"}
+  Rendering application/element/block.html.slim
+  Rendered application/element/block.html.slim (Duration: 2.2ms | Allocations: 1805)
+Completed 200 OK in 5ms (Views: 3.7ms | Allocations: 3198)
+--------------------------------------------------
+Spark::ElementIntegrationTest: test_render_element
+--------------------------------------------------
+Started GET "/element/block" for 127.0.0.1 at 2019-11-07 23:18:03 -0600
+Processing by ApplicationController#show as HTML
+  Parameters: {"path"=>"element/block"}
+  Rendering application/element/block.html.slim
+  Rendered application/element/block.html.slim (Duration: 1.6ms | Allocations: 1811)
+Completed 200 OK in 4ms (Views: 2.8ms | Allocations: 3204)
+--------------------------------------------------
+Spark::ElementIntegrationTest: test_render_element
+--------------------------------------------------
+Started GET "/element/block" for 127.0.0.1 at 2019-11-07 23:18:12 -0600
+Processing by ApplicationController#show as HTML
+  Parameters: {"path"=>"element/block"}
+  Rendering application/element/block.html.slim
+  Rendered application/element/block.html.slim (Duration: 1.9ms | Allocations: 1805)
+Completed 200 OK in 5ms (Views: 3.4ms | Allocations: 3299)
+--------------------------------------------------
+Spark::ElementIntegrationTest: test_render_element
+--------------------------------------------------
+Started GET "/element/block" for 127.0.0.1 at 2019-11-07 23:18:44 -0600
+Processing by ApplicationController#show as HTML
+  Parameters: {"path"=>"element/block"}
+  Rendering application/element/block.html.slim
+  Rendered application/element/block.html.slim (Duration: 1.7ms | Allocations: 1805)
+Completed 200 OK in 5ms (Views: 3.0ms | Allocations: 3198)
+--------------------------------------------------
+Spark::ElementIntegrationTest: test_render_element
+--------------------------------------------------
+Started GET "/element/block" for 127.0.0.1 at 2019-11-07 23:19:06 -0600
+Processing by ApplicationController#show as HTML
+  Parameters: {"path"=>"element/block"}
+  Rendering application/element/block.html.slim
+  Rendered application/element/block.html.slim (Duration: 2.0ms | Allocations: 1940)
+Completed 200 OK in 5ms (Views: 3.4ms | Allocations: 3333)
+--------------------------------------------------
+Spark::ElementIntegrationTest: test_render_element
+--------------------------------------------------
+Started GET "/element/block" for 127.0.0.1 at 2019-11-07 23:19:46 -0600
+Processing by ApplicationController#show as HTML
+  Parameters: {"path"=>"element/block"}
+  Rendering application/element/block.html.slim
+  Rendered application/element/block.html.slim (Duration: 1.6ms | Allocations: 1946)
+Completed 200 OK in 4ms (Views: 2.8ms | Allocations: 3339)

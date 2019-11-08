@@ -21,8 +21,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "actionview-component"
   s.add_development_dependency "bundler", ">= 1.14"
   s.add_development_dependency "minitest", "= 5.1.0"
-  s.add_development_dependency "rails", ">= 5.1.0"
   s.add_development_dependency "rake", "~> 10.0"
   s.add_development_dependency "rubocop"
-  # s.add_development_dependency "sqlite3"
+  s.add_development_dependency "slim"
 end

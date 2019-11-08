@@ -15,3 +15,5 @@ gemspec
 
 gem "pry", group: %i[development test]
 gem "pry-byebug", group: %i[development test]
+gem "rails", '~> 6.0.0'
+#gem "actionview-component", path: "~/workspace/github/actionview-component"

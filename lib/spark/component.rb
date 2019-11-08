@@ -2,6 +2,10 @@
 
 require_relative "element"
 
+if defined?(ActionView::Component::Base)
+  require "spark/integration/action_view_component"
+end
+
 module Spark
   module Component
     def self.included(base)
