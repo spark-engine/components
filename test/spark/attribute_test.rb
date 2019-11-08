@@ -44,14 +44,15 @@ module Spark
       klass = base_class
       klass.attribute :foo
 
-      assert_equal({ foo: nil }, klass.attributes)
+      assert_includes klass.attributes.keys, :foo
     end
 
     def test_can_attributes_with_defaults
       klass = base_class
       klass.attribute :foo, bar: :baz
 
-      assert_equal({ foo: nil, bar: :baz }, klass.attributes)
+      assert_includes klass.attributes.keys, :foo
+      assert_equal :baz, klass.attributes[:bar]
     end
 
     def test_can_set_initialize_attributes

@@ -32,15 +32,16 @@ require_relative "tag/attr"
 #  The html attribute is meant to allow for passing along unaccounted for tag attributes.
 #
 module Spark
+  BASE_ATTRIBUTES = {
+    id: nil,
+    class: nil,
+    data: {},
+    aria: {},
+    html: {}
+  }
+
   module Attribute
     # All components and elements will support these attributes
-    BASE_ATTRIBUTES = {
-      id: nil,
-      class: nil,
-      data: {},
-      aria: {},
-      html: {}
-    }.freeze
 
     def self.included(base)
       base.extend(ClassMethods)
@@ -50,8 +51,8 @@ module Spark
     def initialize_attributes(attrs = nil)
       attrs ||= {}
 
-      BASE_ATTRIBUTES.merge(self.class.attributes).each do |name, default|
-        value = attrs[name] || (!default.nil? ? default.dup : nil)
+      self.class.attributes.each do |name, default|
+        value = attrs[name] || (!default.nil? ? default : nil)
         if set?(value)
           instance_variable_set(:"@#{name}", value)
           attributes[name] = value
@@ -117,7 +118,7 @@ module Spark
 
     module ClassMethods
       def attributes
-        @attributes ||= {}
+        @attributes ||= Spark::BASE_ATTRIBUTES.dup
       end
 
       # Sets attributes, accepts an array of keys, pass a hash to set default values
