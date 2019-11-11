@@ -7,7 +7,7 @@ require "rails/test_help"
 require "spark/component"
 
 module Spark
-  class ComponentTest < ActionDispatch::IntegrationTest
+  class ComponentTest < Minitest::Test
     include ActionView::Component::TestHelpers
 
     def test_attribute_attribute_nil

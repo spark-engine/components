@@ -1,3 +1,8 @@
-= render BlockElement do |c|
-  - c.foo
+#test-1= render ElementComponent do |c|
+  - c.simple_block
     span content
+
+#test-2= render ElementComponent
+
+#test-3= render ElementComponent do |c|
+  - c.block_with_attrs(foo: :bar)

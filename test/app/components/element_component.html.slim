@@ -1,0 +1,6 @@
+div
+  - if simple_block.present?
+    .block = simple_block.yield
+  - if block_with_attrs
+    .attr = block_with_attrs.attribute_foo
+    .method = block_with_attrs.method_test
