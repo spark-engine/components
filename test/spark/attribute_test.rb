@@ -10,16 +10,6 @@ module Spark
 
     def base_class
       Class.new do
-        include Attribute
-
-        def initialize(attributes = nil)
-          initialize_attributes(attributes)
-        end
-      end.dup
-    end
-
-    def validation_class
-      Class.new do
         include ActiveModel::Validations
         include Attribute
 
@@ -35,9 +25,7 @@ module Spark
     end
 
     def test_has_default_attributes
-      klass = base_class
-
-      assert_equal({ id: nil, class: nil, data: {}, aria: {}, html: {} }, klass::BASE_ATTRIBUTES)
+      assert_equal({ id: nil, class: nil, data: {}, aria: {}, html: {} }, base_class.attributes)
     end
 
     def test_can_add_to_attributes
@@ -119,7 +107,7 @@ module Spark
     end
 
     def test_validates_attrs_raises_exception
-      klass = validation_class
+      klass = base_class
       klass.attribute :foo
       klass.validates_attr :foo, presence: true
 
@@ -131,7 +119,7 @@ module Spark
     end
 
     def test_validates_attrs_passes
-      klass = validation_class
+      klass = base_class
       klass.attribute :foo
       klass.validates_attr :foo, presence: true
 
@@ -140,7 +128,7 @@ module Spark
     end
 
     def test_validates_attrs_with_choices_option_raises_exception
-      klass = validation_class
+      klass = base_class
       klass.attribute :size
       klass.validates_attr :size, choices: %w[small medium large]
 
@@ -153,7 +141,7 @@ module Spark
     end
 
     def test_validates_attrs_with_choices_option_passes
-      klass = validation_class
+      klass = base_class
       klass.attribute :size
       klass.validates_attr :size, choices: %w[small medium large]
 

@@ -12,9 +12,6 @@ require File.expand_path("../config/environment.rb", __FILE__)
 require "rails/test_help"
 
 def get_html(result, css: '*')
-  trim_result(result.css(css).to_html)
-end
-
-def trim_result(result)
-  result.delete(" \t\r\n")
+  result = Nokogiri::HTML(result).css("body > #{css}") if result.is_a?(String)
+  result.css(css).to_html
 end
