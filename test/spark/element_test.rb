@@ -16,11 +16,33 @@ module Spark
       assert_equal %(<div class="block"><span>content</span></div>), get_html(response.body, css: ".block")
     end
 
+    def test_render_element_extending_component_multiple
+      get "/element/multi"
+      assert_response :success
+      html = get_html(response.body, css: "ul")
+      assert_includes html, %(<li><div>1</div></li>)
+      assert_includes html, %(<li><div>2</div></li>)
+      assert_includes html, %(<li><div>3</div></li>)
+    end
+
     def test_render_element_with_config
       get "/element/config"
       assert_response :success
       assert_equal %(<div class="attr">bar</div>), get_html(response.body, css: ".attr")
       assert_equal %(<div class="method">success</div>), get_html(response.body, css: ".method")
+    end
+
+    def test_render_element_with_validation_failures
+      exception = assert_raises(ActionView::Template::Error) do
+        get "/element/with_validation_exception"
+      end
+      assert_includes exception.message, "Validation failed: Attribute foo can't be blank"
+    end
+
+    def test_render_element_config_extending_component_validation_override
+      get "/element/with_validation"
+      assert_response :success
+      assert_equal %(<div class="validated">works</div>), get_html(response.body)
     end
 
     def test_render_element_extending_component

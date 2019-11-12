@@ -182,25 +182,29 @@ module Spark
 
       # If an element extends a component, extend that component's class and include the necessary modules
       def extend_class(component, &config)
-        return Class.new(Spark::Element::Base, &config) unless component
+        base = Class.new(component || Spark::Element::Base, &config)
+        define_model_name(base) if defined?(ActiveModel)
 
-        base = Class.new(component, &config)
+        return base unless component
+
+        # Allow element to reference its source component
         base.define_singleton_method(:source_component) { component }
 
         # Override component when used as an element
         base.include(Spark::Integration::Element) if defined?(Spark::Integration)
 
-        if defined?(ActiveModel)
-          # ActiveModel validations require a model_name. This helps connect new classes to their proper model names.
-          base.define_singleton_method(:model_name) do
-            # try the current class, the parent class, or default to Spark::Component
-            klass = [self.class, superclass, Spark::Component].reject { |k| k == Class }.first
-            ActiveModel::Name.new(klass)
-          end
-        end
-
         base
       end
+
+      # ActiveModel validations require a model_name. This helps connect new classes to their proper model names.
+      def define_model_name(klass)
+        klass.define_singleton_method(:model_name) do
+          # try the current class, the parent class, or default to Spark::Component
+          named_klass = [self.class, superclass, Spark::Component].reject { |k| k == Class }.first
+          ActiveModel::Name.new(named_klass)
+        end
+      end
+      
 
       # Prevent an element method from overwriting an existing method
       def define_method_if_able(method_name, &block)

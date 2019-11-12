@@ -4,3 +4,9 @@ div
   - if with_config.present?
     .attr = with_config.attribute_foo
     .method = with_config.method_test
+  - if with_validation.present?
+    = with_validation.yield
+  - unless multis.empty?
+    ul
+      - multis.each do |m|
+        li= m.yield
