@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
 require "test_helper"
-require "spark/tag/attr"
+require "spark/component/tag_attr"
 
 module Spark
-  module Tag
-    class AttrTest < Minitest::Test
+  module Component
+    class TagAttrTest < Minitest::Test
       parallelize_me!
 
       def test_handles_aria_attributes
-        tag_attr = Attr.new
+        tag_attr = TagAttr.new
 
         tag_attr.aria.add(foo: "bar")
         assert_equal %(aria-foo="bar"), tag_attr.aria.to_s
@@ -17,7 +17,7 @@ module Spark
       end
 
       def test_handles_class_attributes
-        tag_attr = Attr.new
+        tag_attr = TagAttr.new
 
         tag_attr.classname.add("foo")
         tag_attr.classname.base = "base"
@@ -26,7 +26,7 @@ module Spark
       end
 
       def test_handles_data_attributes
-        tag_attr = Attr.new
+        tag_attr = TagAttr.new
 
         tag_attr.data.add(foo: "bar")
         assert_equal %(data-foo="bar"), tag_attr.data.to_s
@@ -35,7 +35,7 @@ module Spark
       end
 
       def test_adding_an_empty_attribute_is_a_noop
-        tag_attr = Attr.new
+        tag_attr = TagAttr.new
         tag_attr.add(data: {})
         tag_attr.add(aria: {})
         tag_attr.add(html: {})
@@ -44,7 +44,7 @@ module Spark
       end
 
       def test_merges_html_attributes_with_data_and_aria
-        tag_attr = Attr.new
+        tag_attr = TagAttr.new
 
         data = { a: 1, b: 2 }
         aria = { c: 1, d: 2 }
@@ -60,7 +60,7 @@ module Spark
       end
 
       def test_converts_properly_to_s
-        tag_attr = Attr.new
+        tag_attr = TagAttr.new
 
         aria = { a: 1 }
         data = { b: 2 }

@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module Spark
-  module Tag
-    class Classname < Array
+  module Component
+    class AttrClass < Array
       def initialize(*args, base: nil, &block)
         super(args, &block)
         self.base = base unless base.nil?

@@ -4,7 +4,7 @@ require "test_helper"
 
 class TagAttrTest < ActiveSupport::TestCase
   test "Hash attribute generates html attribute format on to_s" do
-    attr = Spark::Tag::Hash.new
+    attr = Spark::Component::Attribute::Hash.new
     attr.add foo: :bar
 
     assert_equal %(foo="bar"), attr.to_s

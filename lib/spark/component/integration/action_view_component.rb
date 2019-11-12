@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 module Spark
-  module Integration
-    def self.base_class
-      ActionView::Component::Base
-    end
+  module Component
+    module Integration
+      def self.base_class
+        ActionView::Component::Base
+      end
 
-    module Component
       def self.included(base)
         base.extend(ClassMethods)
       end
@@ -43,22 +43,22 @@ module Spark
           define_singleton_method(:source_location) { klass.source_location }
         end
       end
-    end
 
-    module Element
-      def self.included(base)
-        base.extend(ClassMethods)
-      end
+      module Element
+        def self.included(base)
+          base.extend(ClassMethods)
+        end
 
-      # Override class methods when component is used as an element
-      module ClassMethods
-        # This is used to force components to define an initialize method
-        # Overriding it means elements can defer to the original component's initialize method
-        def ensure_initializer_defined; end
+        # Override class methods when component is used as an element
+        module ClassMethods
+          # This is used to force components to define an initialize method
+          # Overriding it means elements can defer to the original component's initialize method
+          def ensure_initializer_defined; end
 
-        # Allows elements to use component's original tempalte file.
-        def source_location
-          source_component.source_location
+          # Allows elements to use component's original tempalte file.
+          def source_location
+            source_component.source_location
+          end
         end
       end
     end
