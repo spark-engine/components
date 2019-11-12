@@ -204,7 +204,6 @@ module Spark
           ActiveModel::Name.new(named_klass)
         end
       end
-      
 
       # Prevent an element method from overwriting an existing method
       def define_method_if_able(method_name, &block)
