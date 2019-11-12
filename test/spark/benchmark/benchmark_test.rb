@@ -20,7 +20,9 @@ module Spark
     end
 
     def bench_memory_profiler
-      puts MemoryProfiler.report(allow_files: "components/lib") { 1_000.times { render_inline(TestComponent) } }.pretty_print
+      puts MemoryProfiler.report(allow_files: "components/lib") do
+        1_000.times { render_inline(TestComponent) }
+      end.pretty_print
     end
   end
 end

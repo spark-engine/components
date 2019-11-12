@@ -192,7 +192,7 @@ module Spark
 
         if defined?(ActiveModel)
           # ActiveModel validations require a model_name. This helps connect new classes to their proper model names.
-          base.define_singleton_method(:model_name) do 
+          base.define_singleton_method(:model_name) do
             # try the current class, the parent class, or default to Spark::Component
             klass = [self.class, superclass, Spark::Component].reject { |k| k == Class }.first
             ActiveModel::Name.new(klass)

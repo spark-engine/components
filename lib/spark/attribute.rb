@@ -38,7 +38,7 @@ module Spark
     data: {},
     aria: {},
     html: {}
-  }
+  }.freeze
 
   module Attribute
     # All components and elements will support these attributes

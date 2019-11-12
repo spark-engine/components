@@ -1,8 +1,8 @@
 class AttributeComponent < ActionView::Component::Base
   include Spark::Component
 
-  SIZES = %i[small medium large]
-  THEMES = %i[primary secondary alternate]
+  SIZES = %i[small medium large].freeze
+  THEMES = %i[primary secondary alternate].freeze
 
   attribute :a, b: true
   attribute :theme, size: :medium

@@ -4,7 +4,6 @@ require "test_helper"
 
 module Spark
   class ElementIntegrationTest < ActionDispatch::IntegrationTest
-
     def test_render_without_element
       get "/element/empty"
       assert_response :success

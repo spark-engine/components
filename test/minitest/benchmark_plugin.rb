@@ -9,10 +9,10 @@ module Minitest
   end
 
   def self.plugin_benchmark_init(options)
-    if options[:benchmark]
-      options[:filter] = "/^bench_*/"
-    else
-      options[:filter] = "/^(?!^bench_|.*Benchmark.*)/"
-    end
+    options[:filter] = if options[:benchmark]
+                         "/^bench_*/"
+                       else
+                         "/^(?!^bench_|.*Benchmark.*)/"
+                       end
   end
 end

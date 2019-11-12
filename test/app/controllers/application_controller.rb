@@ -4,9 +4,9 @@ class ApplicationController < ActionController::Base
   def show
     page = params[:path]
 
-    %w(application).each do | root_page |
-      if page.match(/#{root_page}\/?$/)
-        page = File.join(root_page, 'index')
+    %w[application].each do |root_page|
+      if page.match(%r{#{root_page}/?$})
+        page = File.join(root_page, "index")
       end
     end
 
