@@ -5,19 +5,19 @@ require "test_helper"
 module Spark
   class ElementIntegrationTest < ActionDispatch::IntegrationTest
     def test_render_without_element
-      get "/element/empty"
+      get "/empty"
       assert_response :success
       assert_equal %(<div></div>), get_html(response.body)
     end
 
     def test_render_element
-      get "/element/block"
+      get "/block"
       assert_response :success
       assert_equal %(<div class="block"><span>content</span></div>), get_html(response.body, css: ".block")
     end
 
     def test_render_element_multiple
-      get "/element/multi"
+      get "/multi"
       assert_response :success
       html = get_html(response.body, css: "ul")
       assert_includes html, %(<li>1</li>)
@@ -26,7 +26,7 @@ module Spark
     end
 
     def test_render_element_with_config
-      get "/element/config"
+      get "/config"
       assert_response :success
       assert_equal %(<div class="attr">bar</div>), get_html(response.body, css: ".attr")
       assert_equal %(<div class="method">success</div>), get_html(response.body, css: ".method")
@@ -34,25 +34,32 @@ module Spark
 
     def test_render_element_with_validation_exception
       exception = assert_raises(ActionView::Template::Error) do
-        get "/element/with_validation_exception"
+        get "/with_validation_exception"
       end
       assert_includes exception.message, "Validation failed: Attribute foo can't be blank"
     end
 
     def test_render_element_with_validation_passes
-      get "/element/with_validation"
+      get "/with_validation"
       assert_response :success
       assert_equal %(<div>works</div>), get_html(response.body)
     end
 
     def test_render_element_extending_component
-      get "/element/component"
+      get "/component"
       assert_response :success
       assert_equal %(<div class="el">component-element</div>), get_html(response.body, css: ".el")
     end
 
+    def test_render_element_extending_component_with_elements
+      get "/component_with_elements"
+      assert_response :success
+      assert_equal %(<div class="block">block</div>), get_html(response.body, css: ".block")
+      assert_equal %(<strong>hi</strong>), get_html(response.body, css: "strong")
+    end
+
     def test_render_element_config_extending_component
-      get "/element/component_config"
+      get "/component_config"
       assert_response :success
       assert_equal %(<div class="config">config_default</div>), get_html(response.body, css: ".config")
       assert_equal %(<div class="method">success</div>), get_html(response.body, css: ".method")
@@ -60,19 +67,19 @@ module Spark
 
     def test_render_element_config_extending_component_validation_exception
       exception = assert_raises(ActionView::Template::Error) do
-        get "/element/component_config_validation_exception"
+        get "/component_config_validation_exception"
       end
       assert_includes exception.message, "Validation failed: Attribute a is not a number"
     end
 
     def test_render_element_config_extending_component_validation_override
-      get "/element/component_config_validation"
+      get "/component_config_validation"
       assert_response :success
       assert_equal %(<div class="validated">3</div>), get_html(response.body)
     end
 
     def test_render_element_extending_component_multiple
-      get "/element/component_multi"
+      get "/component_multi"
       assert_response :success
       html = get_html(response.body, css: "ul")
       assert_includes html, %(<li><div>1</div></li>)

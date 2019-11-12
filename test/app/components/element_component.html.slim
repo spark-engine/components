@@ -9,3 +9,5 @@
   .method= component_config.test_method
 - if component_config_validation.present?
   = component_config_validation.yield
+- if with_elements.present?
+  = with_elements.yield

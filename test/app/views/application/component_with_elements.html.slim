@@ -1,0 +1,6 @@
+= render ElementComponent do |c|
+  - c.with_elements do |el|
+    - el.simple_block
+      |block
+    - el.with_validation(foo: true)
+      strong hi

@@ -60,6 +60,10 @@ module Spark
       end
     end
 
+    def attr(name)
+      instance_variable_get(:"@#{name}")
+    end
+
     def attributes
       @attributes ||= {}
     end
