@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-require "active_model"
-require_relative "attribute"
+require "spark/component/attribute"
 
 module Spark
   module Component
@@ -115,7 +114,7 @@ module Spark
         #
         #     By default all elements include Element and extend its class methods
         #     Passing a class like `component: Nav::Item` will extend that component
-        #     adding Element, Attributes, TagAttributes and render methods.
+        #     adding Element, Attributes, TagAttr and render methods.
         #
         #   &config: Block
         #
@@ -221,7 +220,7 @@ module Spark
 
       # Base class for non-component elements
       class Base
-        include ActiveModel::Validations if defined?(ActiveModel::Validations)
+        include ActiveModel::Validations if defined?(ActiveModel)
         include Spark::Component::Element
 
         def initialize(attributes)

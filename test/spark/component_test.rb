@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
 require "test_helper"
-require "action_view/component/test_helpers"
-
-require "rails/test_help"
 require "spark/component"
 
 module Spark

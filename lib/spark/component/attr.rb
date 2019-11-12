@@ -2,7 +2,7 @@
 
 module Spark
   module Component
-    class AttrHash < Hash
+    class Attr < Hash
       def initialize(*args, prefix: nil)
         super(*args)
         @prefix = prefix
@@ -19,7 +19,7 @@ module Spark
       # Output all attributes as [prefix-]name="value"
       def to_s
         each_with_object([]) do |(name, value), array|
-          if value.is_a?(Component::AttrHash)
+          if value.is_a?(Component::Attr)
             # Flatten nested hashs and inject them unless empty
             value = value.to_s
             array << value unless value.empty?

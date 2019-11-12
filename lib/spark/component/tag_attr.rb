@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require_relative "attr_hash"
-require_relative "attr_class"
+require "spark/component/attr"
+require "spark/component/classname"
 
 module Spark
   module Component
-    class TagAttr < Component::AttrHash
+    class TagAttr < Component::Attr
       def add(hash)
         return self if hash.nil? || hash.keys.empty?
 
@@ -29,15 +29,15 @@ module Spark
       end
 
       def aria(*args)
-        self[:aria] ||= AttrHash.new(*args, prefix: :aria)
+        self[:aria] ||= Attr.new(*args, prefix: :aria)
       end
 
       def data(*args)
-        self[:data] ||= AttrHash.new(*args, prefix: :data)
+        self[:data] ||= Attr.new(*args, prefix: :data)
       end
 
       def classname(*args, base: nil)
-        self[:class] ||= AttrClass.new(*args, base: base)
+        self[:class] ||= Classname.new(*args, base: base)
       end
     end
   end

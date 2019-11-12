@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "component/element"
+require "spark/component/element"
 
 if defined?(ActionView::Component::Base)
   require_relative "component/integration/action_view_component"

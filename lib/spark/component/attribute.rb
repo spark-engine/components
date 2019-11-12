@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-require_relative "tag_attr"
+require "spark/component/tag_attr"
 
 # Allows components to easily manage their attributes
 #
 #  # Example component usage:
 #
-#    class SomeComponent
+#    class SomeClass
 #      include Spark::Component::Attribute
 #
 #      # Set a :label attribute, and a :size attribute with default value :large
@@ -19,14 +19,24 @@ require_relative "tag_attr"
 #
 #  # When initialized like:
 #
-#    SomeComponent.new(label: "Test")
+#    some_instance = SomeClass.new(label: "Test")
 #
-#  The Component's instance will now have access to
+#  The Class's instance will now have access to
 #
 #    @label => "Test"
 #    @size  => :large
 #
-#  Extending a component will extend its attributes and their defaults.
+#  And will define access methods:
+#
+#    some_instance.attribute_label
+#    some_instance.attribute_size
+#
+#  Attributes can also be accessed with a helper method
+#
+#    some_instance.attr(:label)
+#    some_instance.attr(:size)
+#
+#  Extending a class will extend its attributes and their defaults.
 #
 #  This supports a common set of base attributes such as id, class, data, aria, and html.
 #  The html attribute is meant to allow for passing along unaccounted for tag attributes.
@@ -155,9 +165,6 @@ module Spark
         #   - validates_attr(:size, choices: SIZES, allow_blank: true)
         #
         def validates_attr(name, options = {})
-          # TODO: Figure out how to properly include this method if ActiveModel is included
-          raise "Requires active_model" if defined?(ActiveModel::Validation)
-
           name = :"attribute_#{name}"
 
           if (choices = options.delete(:choices))

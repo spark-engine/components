@@ -1,22 +1,22 @@
 # frozen_string_literal: true
 
 require "test_helper"
-require "spark/component/attr_class"
+require "spark/component/classname"
 
 module Spark
   module Component
-    class ClassAttrTest < Minitest::Test
+    class ClassnameTest < Minitest::Test
       parallelize_me!
 
       def test_classname_to_s
-        classes = AttrClass.new
+        classes = Classname.new
         classes.add :foo, :bar, :baz
 
         assert_equal("foo bar baz", classes.to_s)
       end
 
       def test_classnames_are_unique
-        classes = AttrClass.new
+        classes = Classname.new
         classes.add :foo, :bar, :baz, :bar
         classes.add :foo
         assert_equal "foo bar baz", classes.to_s
@@ -26,7 +26,7 @@ module Spark
       end
 
       def test_classnames_track_base_class_separately
-        classes = AttrClass.new
+        classes = Classname.new
 
         classes.add :foo, :bar
         assert_nil classes.base

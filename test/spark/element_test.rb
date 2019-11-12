@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "test_helper"
+require "spark/component/element"
 
 module Spark
   class ElementIntegrationTest < ActionDispatch::IntegrationTest

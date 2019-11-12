@@ -2,7 +2,7 @@
 
 module Spark
   module Component
-    class AttrClass < Array
+    class Classname < Array
       def initialize(*args, base: nil, &block)
         super(args, &block)
         self.base = base unless base.nil?
