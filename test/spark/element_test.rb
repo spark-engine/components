@@ -32,7 +32,8 @@ module Spark
     def test_render_element_config_extending_component
       get "/element/component_config"
       assert_response :success
-      assert_equal %(<div class="config">config_default</div>), get_html(response.body)
+      assert_equal %(<div class="config">config_default</div>), get_html(response.body, css: ".config")
+      assert_equal %(<div class="method">success</div>), get_html(response.body, css: ".method")
     end
 
     def test_render_element_config_extending_component_validation_exception

@@ -6,5 +6,6 @@
       li = comp.yield
 - if component_config.present?
   = component_config.yield
+  .method= component_config.test_method
 - if component_config_validation.present?
   = component_config_validation.yield
