@@ -178,16 +178,6 @@ module Spark
         end
       end
 
-      if defined?(ActiveModel::Validation)
-        # ActiveModel validations require a model_name. This helps dynamic class creation
-        # connect new classes to their proper model names.
-        def model_name
-          # try the current class, the parent class, or default to Spark::Component
-          klass = [self.class, superclass, Spark::Component].reject { |k| k == Class }.first
-          ActiveModel::Name.new(klass)
-        end
-      end
-
       private
 
       # If an element extends a component, extend that component's class and include the necessary modules
@@ -199,6 +189,15 @@ module Spark
 
         # Override component when used as an element
         base.include(Spark::Integration::Element) if defined?(Spark::Integration)
+
+        if defined?(ActiveModel)
+          # ActiveModel validations require a model_name. This helps connect new classes to their proper model names.
+          base.define_singleton_method(:model_name) do 
+            # try the current class, the parent class, or default to Spark::Component
+            klass = [self.class, superclass, Spark::Component].reject { |k| k == Class }.first
+            ActiveModel::Name.new(klass)
+          end
+        end
 
         base
       end
