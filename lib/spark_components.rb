@@ -4,7 +4,7 @@ require "spark_components/attributes"
 require "spark_components/element"
 require "spark_components/component"
 require "spark_components/engine"
-require "spark/component"
+#require "spark/component"
 
 module SparkComponents
   class Error < StandardError; end
